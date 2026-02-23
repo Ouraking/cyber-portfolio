@@ -1,0 +1,79 @@
+/**
+ * GLOBAL STYLES — app/globals.css
+ * Base resets, scrollbar styling, selection colors
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ── Custom scrollbar — reinforces the terminal aesthetic */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #020617;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #34d399;
+  }
+
+  /* ── Text selection */
+  ::selection {
+    background: rgba(16, 185, 129, 0.25);
+    color: #f1f5f9;
+  }
+
+  /* ── Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* ── Focus rings — WCAG 2.1 AA compliant */
+  :focus-visible {
+    outline: 2px solid #10b981;
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* ── Animation delay utilities */
+  .delay-100  { animation-delay: 100ms; }
+  .delay-200  { animation-delay: 200ms; }
+  .delay-300  { animation-delay: 300ms; }
+  .delay-400  { animation-delay: 400ms; }
+  .delay-500  { animation-delay: 500ms; }
+  .delay-600  { animation-delay: 600ms; }
+  .delay-700  { animation-delay: 700ms; }
+  .delay-800  { animation-delay: 800ms; }
+
+  /* ── Opacity 0 default for animated elements */
+  .animate-ready { opacity: 0; }
+
+  /* ── Glass effect */
+  .glass {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* ── Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #10b981 0%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Terminal cursor */
+  .cursor::after {
+    content: '▋';
+    animation: blink 1s step-end infinite;
+    color: #10b981;
+  }
+}
