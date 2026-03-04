@@ -53,12 +53,12 @@ const PROJECTS: Project[] = [
     comingSoon: true,
   },
   {
-    title: "Security Audit & Compliance",
+    title: "Security Framework & Compliance",
     category: "GRC",
     methodology:
-      "Coming soon — full project write-up will be available shortly.",
-    tags: ["Audit", "Compliance", "Risk Assessment", "Frameworks"],
-    comingSoon: true,
+      "Assessed a healthcare IT company's security posture against NIST SP 800-53 controls. Identified critical gaps in access control, continuous monitoring, and risk management. Developed remediation plans for least-privilege enforcement, SIEM deployment, and structured risk response. Designed PCI-DSS compliance strategy for payment card processing with role-based responsibilities.",
+    tags: ["NIST 800-53", "PCI-DSS", "FISMA", "Risk Assessment", "SIEM", "RBAC"],
+    repoUrl: "https://github.com/Ouraking/security-framework-compliance",
     wide: true,
   },
   {
