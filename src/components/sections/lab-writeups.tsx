@@ -28,6 +28,15 @@ const PROJECTS: Project[] = [
     wide: true,
   },
   {
+    title: "Cloud Security Implementation",
+    category: "Cloud Security",
+    methodology:
+      "Migrated a shipping company's on-premises infrastructure to Azure IaaS. Implemented department-specific RBAC, Key Vault access policies with soft delete and purge protection, encryption for data at rest and in transit, and automated backup configurations. Addressed insider threat risks and ensured compliance with FISMA, PCI-DSS, and NIST SP 800-53.",
+    tags: ["Azure IaaS", "RBAC", "Key Vault", "FISMA", "PCI-DSS", "NIST 800-53"],
+    repoUrl: "https://github.com/Ouraking/cloud-security-project",
+    wide: true,
+  },
+  {
     title: "Penetration Testing Report",
     category: "Red Team",
     methodology:
@@ -81,6 +90,7 @@ const PROJECTS: Project[] = [
 
 const CATEGORY_COLORS: Record<string, string> = {
   "Network Security": "bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30",
+  "Cloud Security": "bg-accent-blue/10 text-accent-blue border-accent-blue/30",
   "Red Team": "bg-accent-red/10 text-accent-red border-accent-red/30",
   "Blue Team": "bg-accent-blue/10 text-accent-blue border-accent-blue/30",
   "Application Security": "bg-accent-emerald/10 text-accent-emerald border-accent-emerald/30",
