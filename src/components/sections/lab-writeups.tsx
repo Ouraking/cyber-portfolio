@@ -33,7 +33,7 @@ const PROJECTS: Project[] = [
     methodology:
       "Migrated a shipping company's on-premises infrastructure to Azure IaaS. Implemented department-specific RBAC, Key Vault access policies with soft delete and purge protection, encryption for data at rest and in transit, and automated backup configurations. Addressed insider threat risks and ensured compliance with FISMA, PCI-DSS, and NIST SP 800-53.",
     tags: ["Azure IaaS", "RBAC", "Key Vault", "FISMA", "PCI-DSS", "NIST 800-53"],
-    repoUrl: "https://github.com/Ouraking/cloud-security-project",
+    repoUrl: "https://github.com/Ouraking/azure-cloud-security-project",
     wide: true,
   },
   {
