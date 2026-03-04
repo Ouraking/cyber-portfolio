@@ -1,70 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Send, Copy, Check, KeyRound, Mail, User, MessageSquare } from "lucide-react";
-
-/**
- * Placeholder PGP public key — replace with your actual key.
- * Displayed read-only with a copy-to-clipboard button.
- */
-const PGP_PUBLIC_KEY = `-----BEGIN PGP PUBLIC KEY BLOCK-----
-
-mQINBGXXXXXBEACzxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-=XXXX
------END PGP PUBLIC KEY BLOCK-----`;
-
-function CopyPGPKey() {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(PGP_PUBLIC_KEY);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback: clipboard API may be blocked in non-secure contexts
-    }
-  };
-
-  return (
-    <div className="rounded-xl border border-border bg-card p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <KeyRound className="h-4 w-4 text-accent-cyan" aria-hidden="true" />
-          <h3 className="text-sm font-semibold text-foreground">PGP Public Key</h3>
-        </div>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted btn-press hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
-          aria-label={copied ? "PGP key copied to clipboard" : "Copy PGP key to clipboard"}
-        >
-          {copied ? (
-            <>
-              <Check className="h-3 w-3 text-accent-emerald" aria-hidden="true" />
-              Copied
-            </>
-          ) : (
-            <>
-              <Copy className="h-3 w-3" aria-hidden="true" />
-              Copy Key
-            </>
-          )}
-        </button>
-      </div>
-      <pre className="overflow-x-auto rounded-lg bg-background p-4 text-[11px] font-mono text-muted leading-relaxed terminal-scrollbar max-h-36">
-        {PGP_PUBLIC_KEY}
-      </pre>
-      <p className="mt-3 text-xs text-muted">
-        Use this key to send me encrypted messages. Fingerprint verification
-        available on request.
-      </p>
-    </div>
-  );
-}
+import { Send, Check, Mail, User, MessageSquare } from "lucide-react";
 
 /**
  * Contact form.
@@ -122,7 +59,7 @@ export function ContactSection() {
           </p>
         </div>
 
-        <div className="mx-auto max-w-3xl grid gap-8 lg:grid-cols-2">
+        <div className="mx-auto max-w-xl">
           {/* Form */}
           <form
             onSubmit={handleSubmit}
@@ -206,9 +143,6 @@ export function ContactSection() {
               Send Message
             </button>
           </form>
-
-          {/* PGP key section */}
-          <CopyPGPKey />
         </div>
       </div>
 
