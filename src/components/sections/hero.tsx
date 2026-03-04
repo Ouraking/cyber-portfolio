@@ -167,7 +167,7 @@ export function HeroSection() {
             }`}
             style={{ transitionDelay: "250ms" }}
           >
-            Security Researcher
+            Cybersecurity Engineer
           </p>
 
           <p
