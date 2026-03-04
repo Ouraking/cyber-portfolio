@@ -4,22 +4,32 @@ import { SkillMatrixSection } from "@/components/sections/skill-matrix";
 import { LabWriteupsSection } from "@/components/sections/lab-writeups";
 import { RoadmapSection } from "@/components/sections/roadmap";
 import { ContactSection } from "@/components/sections/contact";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 /**
  * Home page — single-page portfolio layout.
  * Each section is a self-contained component for maintainability.
- * All sections are server-rendered by default; only interactive
- * components (Hero terminal, Contact form) use "use client".
+ * ScrollReveal wraps sections for scroll-triggered entrance animations.
+ * Section dividers add subtle gradient lines between content areas.
  */
 export default function Home() {
   return (
     <>
       <HeroSection />
-      <PhilosophySection />
+      <div className="section-divider" aria-hidden="true" />
+      <ScrollReveal>
+        <PhilosophySection />
+      </ScrollReveal>
+      <div className="section-divider" aria-hidden="true" />
       <SkillMatrixSection />
+      <div className="section-divider" aria-hidden="true" />
       <LabWriteupsSection />
+      <div className="section-divider" aria-hidden="true" />
       <RoadmapSection />
-      <ContactSection />
+      <div className="section-divider" aria-hidden="true" />
+      <ScrollReveal>
+        <ContactSection />
+      </ScrollReveal>
     </>
   );
 }

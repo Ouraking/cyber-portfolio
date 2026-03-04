@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Shield, Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
@@ -12,10 +12,19 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
-      className="fixed top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-md"
+      className={`fixed top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
+        scrolled ? "navbar-scrolled" : "border-border/50"
+      }`}
       role="banner"
     >
       <nav
@@ -63,27 +72,28 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile dropdown */}
-      {mobileOpen && (
-        <ul
-          id="mobile-nav"
-          className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 py-4 space-y-3"
-          role="menu"
-        >
-          {NAV_LINKS.map((link) => (
-            <li key={link.href} role="none">
-              <a
-                href={link.href}
-                role="menuitem"
-                className="block text-sm text-muted transition-colors hover:text-foreground py-1"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* Mobile dropdown — always in DOM, transitions max-height + opacity */}
+      <ul
+        id="mobile-nav"
+        className={`md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 space-y-3 overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileOpen ? "max-h-60 py-4 opacity-100" : "max-h-0 py-0 opacity-0"
+        }`}
+        role="menu"
+        aria-hidden={!mobileOpen}
+      >
+        {NAV_LINKS.map((link) => (
+          <li key={link.href} role="none">
+            <a
+              href={link.href}
+              role="menuitem"
+              className="block text-sm text-muted transition-colors hover:text-foreground py-1"
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
     </header>
   );
 }

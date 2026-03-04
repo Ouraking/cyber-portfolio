@@ -1,4 +1,7 @@
+"use client";
+
 import { ExternalLink, GraduationCap, GitBranch, Lock } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface Project {
   title: string;
@@ -103,16 +106,16 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <article
-      className={`group relative rounded-xl border border-border bg-card p-6 transition-colors ${
+      className={`group relative rounded-xl border border-border bg-card p-6 ${
         project.comingSoon
           ? "opacity-60"
-          : "hover:border-accent-cyan/30 hover:bg-card-hover"
+          : "card-hover-lift glow-hover-cyan hover:border-accent-cyan/30"
       } ${project.wide ? "sm:col-span-2" : ""}`}
     >
       {/* Coming soon overlay */}
       {project.comingSoon && (
         <div className="absolute top-3 right-3">
-          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/80 px-2.5 py-0.5 text-[10px] font-mono text-muted">
+          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/80 px-2.5 py-0.5 text-[10px] font-mono text-muted animate-pulse-subtle">
             <Lock className="h-3 w-3" aria-hidden="true" />
             Coming Soon
           </span>
@@ -162,9 +165,9 @@ function ProjectCard({ project }: { project: Project }) {
           rel="noopener noreferrer"
           className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent-cyan transition-colors hover:text-accent-emerald focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan rounded"
         >
-          <GitBranch className="h-3 w-3" aria-hidden="true" />
+          <GitBranch className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
           View Repository
-          <ExternalLink className="h-3 w-3" aria-hidden="true" />
+          <ExternalLink className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
         </a>
       )}
     </article>
@@ -180,23 +183,27 @@ export function LabWriteupsSection() {
     >
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
-        <div className="text-center mb-12">
-          <h2
-            id="labs-heading"
-            className="text-3xl font-bold tracking-tight text-foreground"
-          >
-            My Projects
-          </h2>
-          <p className="mt-3 text-muted max-w-lg mx-auto">
-            Applied cybersecurity projects showcasing hands-on security
-            engineering, analysis, and governance.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2
+              id="labs-heading"
+              className="text-3xl font-bold tracking-tight text-foreground"
+            >
+              My Projects
+            </h2>
+            <p className="mt-3 text-muted max-w-lg mx-auto">
+              Applied cybersecurity projects showcasing hands-on security
+              engineering, analysis, and governance.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Bento grid */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {PROJECTS.map((project) => (
-            <ProjectCard key={project.title} project={project} />
+          {PROJECTS.map((project, index) => (
+            <ScrollReveal key={project.title} delay={index * 100}>
+              <ProjectCard project={project} />
+            </ScrollReveal>
           ))}
         </div>
       </div>

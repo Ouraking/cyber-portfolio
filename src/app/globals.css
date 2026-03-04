@@ -68,6 +68,10 @@ html {
   animation: blink 1s step-end infinite;
 }
 
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
 /* Fade-in animation for sections */
 @keyframes fade-in-up {
   from {
@@ -81,4 +85,186 @@ html {
 }
 .animate-fade-in-up {
   animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Slide in from left (for timeline items) */
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.5s ease-out forwards;
+}
+
+/* Scale up from center */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+/* Subtle pulse for "coming soon" badges */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Gradient shimmer for section dividers */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Toast notification */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+.animate-toast-in {
+  animation: toast-in 0.3s ease-out forwards;
+}
+.animate-toast-out {
+  animation: toast-out 0.3s ease-in forwards;
+}
+
+/* ============================================
+   SCROLL REVEAL SYSTEM
+   ============================================ */
+.scroll-reveal {
+  opacity: 0;
+  animation-play-state: paused;
+  animation-fill-mode: forwards;
+}
+.scroll-reveal.is-visible {
+  animation-play-state: running;
+}
+
+/* ============================================
+   CARD HOVER EFFECTS
+   ============================================ */
+.card-hover-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.card-hover-lift:hover.glow-hover-cyan {
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.12), 0 0 0 1px rgba(34, 211, 238, 0.08);
+}
+.card-hover-lift:hover.glow-hover-red {
+  box-shadow: 0 4px 20px rgba(248, 113, 113, 0.12), 0 0 0 1px rgba(248, 113, 113, 0.08);
+}
+.card-hover-lift:hover.glow-hover-blue {
+  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.12), 0 0 0 1px rgba(96, 165, 250, 0.08);
+}
+.card-hover-lift:hover.glow-hover-amber {
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.12), 0 0 0 1px rgba(251, 191, 36, 0.08);
+}
+.card-hover-lift:hover.glow-hover-emerald {
+  box-shadow: 0 4px 20px rgba(52, 211, 153, 0.12), 0 0 0 1px rgba(52, 211, 153, 0.08);
+}
+.card-hover-lift:hover.glow-hover-purple {
+  box-shadow: 0 4px 20px rgba(167, 139, 250, 0.12), 0 0 0 1px rgba(167, 139, 250, 0.08);
+}
+
+/* ============================================
+   BUTTON EFFECTS
+   ============================================ */
+.btn-press {
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-press:hover {
+  transform: scale(1.03);
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ============================================
+   FORM FOCUS ENHANCEMENTS
+   ============================================ */
+.input-glow {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-glow:focus {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1), 0 0 15px rgba(34, 211, 238, 0.05);
+}
+
+/* ============================================
+   GRADIENT SECTION DIVIDERS
+   ============================================ */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-cyan),
+    var(--color-accent-emerald),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 8s linear infinite;
+  opacity: 0.2;
+}
+
+/* ============================================
+   NAVBAR SCROLL EFFECT
+   ============================================ */
+.navbar-scrolled {
+  border-bottom-color: rgba(34, 211, 238, 0.15) !important;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    animation: none !important;
+  }
+  .card-hover-lift,
+  .btn-press {
+    transition: none !important;
+    transform: none !important;
+  }
+  .animate-pulse-subtle,
+  .section-divider {
+    animation: none !important;
+  }
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Swords,
   ShieldCheck,
@@ -15,9 +17,9 @@ import {
   Activity,
   Radio,
   ScrollText,
-  Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface Skill {
   name: string;
@@ -31,6 +33,7 @@ interface SkillCategory {
   accentColor: string;
   borderColor: string;
   bgColor: string;
+  glowClass: string;
   skills: Skill[];
 }
 
@@ -41,6 +44,7 @@ const CATEGORIES: SkillCategory[] = [
     accentColor: "text-accent-red",
     borderColor: "border-accent-red/30",
     bgColor: "bg-accent-red/5",
+    glowClass: "glow-hover-red",
     skills: [
       { name: "Penetration Testing", icon: Swords },
       { name: "Vulnerability Assessment", icon: Bug },
@@ -55,6 +59,7 @@ const CATEGORIES: SkillCategory[] = [
     accentColor: "text-accent-blue",
     borderColor: "border-accent-blue/30",
     bgColor: "bg-accent-blue/5",
+    glowClass: "glow-hover-blue",
     skills: [
       { name: "Incident Response", icon: ShieldCheck },
       { name: "Threat Detection & Analysis", icon: Eye },
@@ -69,6 +74,7 @@ const CATEGORIES: SkillCategory[] = [
     accentColor: "text-accent-amber",
     borderColor: "border-accent-amber/30",
     bgColor: "bg-accent-amber/5",
+    glowClass: "glow-hover-amber",
     skills: [
       { name: "Risk Management", icon: Scale },
       { name: "Compliance Frameworks", icon: FileCheck },
@@ -82,6 +88,7 @@ const CATEGORIES: SkillCategory[] = [
     accentColor: "text-accent-cyan",
     borderColor: "border-accent-cyan/30",
     bgColor: "bg-accent-cyan/5",
+    glowClass: "glow-hover-cyan",
     skills: [
       { name: "Rapid7 InsightVM", icon: ScanSearch },
       { name: "Cloud (AWS, Azure, GCP)", icon: Cloud },
@@ -94,7 +101,7 @@ const CATEGORIES: SkillCategory[] = [
 function SkillCard({ category }: { category: SkillCategory }) {
   return (
     <div
-      className={`rounded-xl border ${category.borderColor} ${category.bgColor} p-6 transition-colors hover:bg-card-hover`}
+      className={`group rounded-xl border ${category.borderColor} ${category.bgColor} p-6 card-hover-lift ${category.glowClass}`}
     >
       <h3 className={`text-lg font-semibold ${category.accentColor}`}>
         {category.title}
@@ -107,7 +114,7 @@ function SkillCard({ category }: { category: SkillCategory }) {
           return (
             <li key={skill.name} className="flex items-center gap-3">
               <Icon
-                className={`h-4 w-4 shrink-0 ${category.accentColor}`}
+                className={`h-4 w-4 shrink-0 ${category.accentColor} transition-transform duration-200 group-hover:scale-110`}
                 aria-hidden="true"
               />
               <span className="text-sm text-foreground/80">{skill.name}</span>
@@ -128,23 +135,27 @@ export function SkillMatrixSection() {
     >
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
-        <div className="text-center mb-12">
-          <h2
-            id="skills-heading"
-            className="text-3xl font-bold tracking-tight text-foreground"
-          >
-            Skill Matrix
-          </h2>
-          <p className="mt-3 text-muted max-w-md mx-auto">
-            Capabilities organized by security domain — from offensive
-            operations to governance and tooling.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2
+              id="skills-heading"
+              className="text-3xl font-bold tracking-tight text-foreground"
+            >
+              Skill Matrix
+            </h2>
+            <p className="mt-3 text-muted max-w-md mx-auto">
+              Capabilities organized by security domain — from offensive
+              operations to governance and tooling.
+            </p>
+          </div>
+        </ScrollReveal>
 
-        {/* Grid of skill categories — 2x2 on large screens */}
+        {/* Grid of skill categories */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {CATEGORIES.map((cat) => (
-            <SkillCard key={cat.title} category={cat} />
+          {CATEGORIES.map((cat, index) => (
+            <ScrollReveal key={cat.title} delay={index * 120}>
+              <SkillCard category={cat} />
+            </ScrollReveal>
           ))}
         </div>
       </div>

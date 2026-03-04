@@ -1,4 +1,7 @@
+"use client";
+
 import { CheckCircle2, Circle, Target } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 type MilestoneStatus = "completed" | "in-progress" | "planned";
 
@@ -168,26 +171,29 @@ export function RoadmapSection() {
     >
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
-        <div className="text-center mb-12">
-          <h2
-            id="roadmap-heading"
-            className="text-3xl font-bold tracking-tight text-foreground"
-          >
-            Security Roadmap
-          </h2>
-          <p className="mt-3 text-muted max-w-md mx-auto">
-            Certifications earned, in progress, and on the horizon.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2
+              id="roadmap-heading"
+              className="text-3xl font-bold tracking-tight text-foreground"
+            >
+              Security Roadmap
+            </h2>
+            <p className="mt-3 text-muted max-w-md mx-auto">
+              Certifications earned, in progress, and on the horizon.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Timeline */}
         <div className="mx-auto max-w-2xl">
           {MILESTONES.map((m, i) => (
-            <TimelineMilestone
-              key={m.title}
-              milestone={m}
-              isLast={i === MILESTONES.length - 1}
-            />
+            <ScrollReveal key={m.title} delay={i * 150} animation="animate-slide-in-left">
+              <TimelineMilestone
+                milestone={m}
+                isLast={i === MILESTONES.length - 1}
+              />
+            </ScrollReveal>
           ))}
         </div>
       </div>

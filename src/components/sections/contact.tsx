@@ -39,7 +39,7 @@ function CopyPGPKey() {
         <button
           type="button"
           onClick={handleCopy}
-          className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
+          className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted btn-press hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
           aria-label={copied ? "PGP key copied to clipboard" : "Copy PGP key to clipboard"}
         >
           {copied ? (
@@ -82,14 +82,20 @@ export function ContactSection() {
     email: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastExiting, setToastExiting] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // TODO: Wire up to a server action or API route.
     // Server-side: validate email format, sanitize message, enforce rate limits.
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setToastVisible(true);
+    setToastExiting(false);
+    setTimeout(() => setToastExiting(true), 2500);
+    setTimeout(() => {
+      setToastVisible(false);
+      setToastExiting(false);
+    }, 2800);
     setFormState({ name: "", email: "", message: "" });
   };
 
@@ -141,7 +147,7 @@ export function ContactSection() {
                 onChange={(e) =>
                   setFormState((s) => ({ ...s, name: e.target.value }))
                 }
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 focus:border-accent-cyan/50 focus:outline-none focus:ring-2 focus:ring-accent-cyan/20 transition-colors"
+                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 input-glow focus:outline-none"
                 placeholder="Your name"
               />
             </div>
@@ -164,7 +170,7 @@ export function ContactSection() {
                 onChange={(e) =>
                   setFormState((s) => ({ ...s, email: e.target.value }))
                 }
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 focus:border-accent-cyan/50 focus:outline-none focus:ring-2 focus:ring-accent-cyan/20 transition-colors"
+                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 input-glow focus:outline-none"
                 placeholder="you@example.com"
               />
             </div>
@@ -186,7 +192,7 @@ export function ContactSection() {
                 onChange={(e) =>
                   setFormState((s) => ({ ...s, message: e.target.value }))
                 }
-                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 focus:border-accent-cyan/50 focus:outline-none focus:ring-2 focus:ring-accent-cyan/20 transition-colors resize-none"
+                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 input-glow focus:outline-none resize-none"
                 placeholder="Describe the opportunity or project..."
               />
             </div>
@@ -194,20 +200,10 @@ export function ContactSection() {
             {/* Submit */}
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 px-5 py-2.5 text-sm font-medium text-accent-cyan transition-colors hover:bg-accent-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan disabled:opacity-50"
-              disabled={submitted}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 px-5 py-2.5 text-sm font-medium text-accent-cyan btn-press hover:bg-accent-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
             >
-              {submitted ? (
-                <>
-                  <Check className="h-4 w-4" aria-hidden="true" />
-                  Message Sent
-                </>
-              ) : (
-                <>
-                  <Send className="h-4 w-4" aria-hidden="true" />
-                  Send Message
-                </>
-              )}
+              <Send className="h-4 w-4" aria-hidden="true" />
+              Send Message
             </button>
           </form>
 
@@ -215,6 +211,20 @@ export function ContactSection() {
           <CopyPGPKey />
         </div>
       </div>
+
+      {/* Success toast */}
+      {toastVisible && (
+        <div
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border border-accent-emerald/30 bg-card px-4 py-3 text-sm font-medium text-accent-emerald shadow-lg ${
+            toastExiting ? "animate-toast-out" : "animate-toast-in"
+          }`}
+          role="status"
+          aria-live="polite"
+        >
+          <Check className="h-4 w-4" aria-hidden="true" />
+          Message sent successfully
+        </div>
+      )}
     </section>
   );
 }
