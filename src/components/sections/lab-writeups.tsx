@@ -40,22 +40,6 @@ const PROJECTS: Project[] = [
     wide: true,
   },
   {
-    title: "Penetration Testing Report",
-    category: "Red Team",
-    methodology:
-      "Coming soon — full project write-up will be available shortly.",
-    tags: ["Penetration Testing", "OWASP", "Vulnerability Assessment"],
-    comingSoon: true,
-  },
-  {
-    title: "Digital Forensics & Incident Response",
-    category: "Blue Team",
-    methodology:
-      "Coming soon — full project write-up will be available shortly.",
-    tags: ["DFIR", "Evidence Handling", "Chain of Custody"],
-    comingSoon: true,
-  },
-  {
     title: "Security Audit & Compliance",
     category: "GRC",
     methodology:
@@ -63,22 +47,6 @@ const PROJECTS: Project[] = [
     tags: ["NIST 800-53", "PCI-DSS", "FISMA", "Risk Assessment", "SIEM", "RBAC"],
     repoUrl: "https://github.com/Ouraking/security-audit-compliance",
     wide: true,
-  },
-  {
-    title: "Secure Software Design",
-    category: "Application Security",
-    methodology:
-      "Coming soon — full project write-up will be available shortly.",
-    tags: ["SDLC", "Threat Modeling", "Secure Coding"],
-    comingSoon: true,
-  },
-  {
-    title: "Cybersecurity Management",
-    category: "GRC",
-    methodology:
-      "Coming soon — full project write-up will be available shortly.",
-    tags: ["Risk Management", "Policy", "Governance"],
-    comingSoon: true,
   },
   {
     title: "Zero Trust IAM for 40,000 Identities",
