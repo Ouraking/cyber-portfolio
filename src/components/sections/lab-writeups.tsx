@@ -81,12 +81,12 @@ const PROJECTS: Project[] = [
     comingSoon: true,
   },
   {
-    title: "Capstone Project",
+    title: "Zero Trust IAM for 40,000 Identities",
     category: "Capstone",
     methodology:
-      "Coming soon — full project write-up will be available shortly.",
-    tags: ["Capstone", "Research", "Applied Security"],
-    comingSoon: true,
+      "Designed and validated a centralized Identity and Access Management solution using Microsoft Entra ID for a university with 40,000+ students. Deployed 25 simulated identities, configured four Conditional Access policies enforcing MFA, and built a PowerShell bulk provisioning template for full-scale rollout. Achieved 100% policy enforcement with zero failures. Aligned with NIST CSF 2.0, ISO/IEC 27001:2022, and NIST SP 800-207 Zero Trust Architecture.",
+    tags: ["Zero Trust", "Microsoft Entra ID", "MFA", "Conditional Access", "NIST CSF 2.0", "ISO 27001", "PowerShell"],
+    repoUrl: "https://github.com/Ouraking/zero-trust-architecture-phase1",
     wide: true,
   },
 ];
