@@ -110,53 +110,64 @@ function TimelineMilestone({
           <Icon className={`h-5 w-5 ${config.color}`} aria-hidden="true" />
         </div>
         {!isLast && (
-          <div className="w-px flex-1 bg-border" aria-hidden="true" />
+          <div
+            className={`w-px flex-1 ${
+              milestone.status === "completed"
+                ? "bg-accent-emerald/30"
+                : milestone.status === "in-progress"
+                ? "bg-gradient-to-b from-accent-cyan/30 to-border/50"
+                : "bg-border/50"
+            }`}
+            aria-hidden="true"
+          />
         )}
       </div>
 
       {/* Content */}
       <div className={`pb-10 ${isLast ? "pb-0" : ""}`}>
-        <div className="flex flex-wrap items-center gap-3">
-          <h3 className="text-base font-semibold text-foreground">
-            {milestone.title}
-          </h3>
-          <span
-            className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${
-              milestone.status === "completed"
-                ? "border-accent-emerald/30 text-accent-emerald"
-                : milestone.status === "in-progress"
-                ? "border-accent-cyan/30 text-accent-cyan"
-                : "border-border text-muted"
-            }`}
-          >
-            {config.label}
+        <div className="rounded-lg border border-border/50 bg-card/30 p-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <h3 className="text-base font-semibold text-foreground">
+              {milestone.title}
+            </h3>
+            <span
+              className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${
+                milestone.status === "completed"
+                  ? "border-accent-emerald/30 text-accent-emerald"
+                  : milestone.status === "in-progress"
+                  ? "border-accent-cyan/30 text-accent-cyan"
+                  : "border-border text-muted"
+              }`}
+            >
+              {config.label}
+            </span>
+          </div>
+          <p className="mt-1 text-sm text-muted leading-relaxed max-w-md">
+            {milestone.description}
+          </p>
+
+          {/* Render individual cert badges when grouped */}
+          {milestone.items && milestone.items.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {milestone.items.map((item) => (
+                <span
+                  key={item}
+                  className={`rounded-md border px-2.5 py-1 text-xs font-mono ${
+                    milestone.status === "completed"
+                      ? "border-accent-emerald/20 bg-accent-emerald/5 text-accent-emerald"
+                      : "border-border bg-card text-muted"
+                  }`}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <span className="mt-2 inline-block text-xs font-mono text-muted/60">
+            {milestone.date}
           </span>
         </div>
-        <p className="mt-1 text-sm text-muted leading-relaxed max-w-md">
-          {milestone.description}
-        </p>
-
-        {/* Render individual cert badges when grouped */}
-        {milestone.items && milestone.items.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {milestone.items.map((item) => (
-              <span
-                key={item}
-                className={`rounded-md border px-2.5 py-1 text-xs font-mono ${
-                  milestone.status === "completed"
-                    ? "border-accent-emerald/20 bg-accent-emerald/5 text-accent-emerald"
-                    : "border-border bg-card text-muted"
-                }`}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <span className="mt-2 inline-block text-xs font-mono text-muted/60">
-          {milestone.date}
-        </span>
       </div>
     </div>
   );

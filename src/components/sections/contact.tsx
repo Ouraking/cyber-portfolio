@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Send, Check, Mail, User, MessageSquare, AlertCircle, Loader2 } from "lucide-react";
+import { Send, Check, Mail, User, MessageSquare, AlertCircle, Loader2, MapPin, CircleDot } from "lucide-react";
 
 /**
  * Contact form — sends messages via Formsubmit.co to jm18306@gmail.com.
@@ -92,8 +92,53 @@ export function ContactSection() {
           </p>
         </div>
 
-        <div className="mx-auto max-w-xl">
-          {/* Form */}
+        <div className="mx-auto max-w-5xl grid gap-10 lg:grid-cols-2 items-start">
+          {/* Left column: info cards */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-1">Let&apos;s Connect</h3>
+              <p className="text-sm text-muted leading-relaxed">
+                Whether you have an opportunity, a question, or just want to talk security &mdash; I&apos;d love to hear from you.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Email card */}
+              <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-cyan/10">
+                  <Mail className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Email</p>
+                  <p className="text-sm text-muted">jm18306@gmail.com</p>
+                </div>
+              </div>
+
+              {/* Location card */}
+              <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-blue/10">
+                  <MapPin className="h-5 w-5 text-accent-blue" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Location</p>
+                  <p className="text-sm text-muted">United States &mdash; Open to Remote</p>
+                </div>
+              </div>
+
+              {/* Availability card */}
+              <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-emerald/10">
+                  <CircleDot className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Availability</p>
+                  <p className="text-sm text-muted">Open to internships &amp; collaborations</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right column: Form */}
           <form
             onSubmit={handleSubmit}
             className="rounded-xl border border-border bg-card p-6 space-y-5"
@@ -186,7 +231,7 @@ export function ContactSection() {
               )}
             </button>
           </form>
-        </div>
+        </div>  {/* end grid */}
       </div>
 
       {/* Toast notification */}

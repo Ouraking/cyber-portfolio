@@ -24,6 +24,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 interface Skill {
   name: string;
   icon: LucideIcon;
+  level: number;
 }
 
 interface SkillCategory {
@@ -46,11 +47,11 @@ const CATEGORIES: SkillCategory[] = [
     bgColor: "bg-accent-red/5",
     glowClass: "glow-hover-red",
     skills: [
-      { name: "Penetration Testing", icon: Swords },
-      { name: "Vulnerability Assessment", icon: Bug },
-      { name: "Exploit Development", icon: Cpu },
-      { name: "Social Engineering", icon: UserX },
-      { name: "Metasploit & Burp Suite", icon: ScanSearch },
+      { name: "Penetration Testing", icon: Swords, level: 82 },
+      { name: "Vulnerability Assessment", icon: Bug, level: 88 },
+      { name: "Exploit Development", icon: Cpu, level: 72 },
+      { name: "Social Engineering", icon: UserX, level: 75 },
+      { name: "Metasploit & Burp Suite", icon: ScanSearch, level: 80 },
     ],
   },
   {
@@ -61,11 +62,11 @@ const CATEGORIES: SkillCategory[] = [
     bgColor: "bg-accent-blue/5",
     glowClass: "glow-hover-blue",
     skills: [
-      { name: "Incident Response", icon: ShieldCheck },
-      { name: "Threat Detection & Analysis", icon: Eye },
-      { name: "SIEM Configuration", icon: Activity },
-      { name: "Endpoint Protection", icon: Lock },
-      { name: "Network Monitoring", icon: Radio },
+      { name: "Incident Response", icon: ShieldCheck, level: 85 },
+      { name: "Threat Detection & Analysis", icon: Eye, level: 90 },
+      { name: "SIEM Configuration", icon: Activity, level: 83 },
+      { name: "Endpoint Protection", icon: Lock, level: 80 },
+      { name: "Network Monitoring", icon: Radio, level: 87 },
     ],
   },
   {
@@ -76,10 +77,10 @@ const CATEGORIES: SkillCategory[] = [
     bgColor: "bg-accent-amber/5",
     glowClass: "glow-hover-amber",
     skills: [
-      { name: "Risk Management", icon: Scale },
-      { name: "Compliance Frameworks", icon: FileCheck },
-      { name: "Security Auditing", icon: ScrollText },
-      { name: "Regulatory Requirements", icon: FileCheck },
+      { name: "Risk Management", icon: Scale, level: 88 },
+      { name: "Compliance Frameworks", icon: FileCheck, level: 92 },
+      { name: "Security Auditing", icon: ScrollText, level: 85 },
+      { name: "Regulatory Requirements", icon: FileCheck, level: 90 },
     ],
   },
   {
@@ -90,15 +91,24 @@ const CATEGORIES: SkillCategory[] = [
     bgColor: "bg-accent-cyan/5",
     glowClass: "glow-hover-cyan",
     skills: [
-      { name: "Rapid7 InsightVM", icon: ScanSearch },
-      { name: "Cloud (AWS, Azure, GCP)", icon: Cloud },
-      { name: "Linux & Windows Admin", icon: Server },
-      { name: "Scripting & Automation", icon: Terminal },
+      { name: "Rapid7 InsightVM", icon: ScanSearch, level: 93 },
+      { name: "Cloud (AWS, Azure, GCP)", icon: Cloud, level: 82 },
+      { name: "Linux & Windows Admin", icon: Server, level: 85 },
+      { name: "Scripting & Automation", icon: Terminal, level: 78 },
     ],
   },
 ];
 
+const BAR_COLORS: Record<string, string> = {
+  "Offensive Security": "bg-accent-red/60",
+  "Defensive Security": "bg-accent-blue/60",
+  "GRC & Compliance": "bg-accent-amber/60",
+  "Tools & Platforms": "bg-accent-cyan/60",
+};
+
 function SkillCard({ category }: { category: SkillCategory }) {
+  const barColorClass = BAR_COLORS[category.title] ?? "bg-accent-cyan/60";
+
   return (
     <div
       className={`group rounded-xl border ${category.borderColor} ${category.bgColor} p-6 card-hover-lift ${category.glowClass}`}
@@ -114,10 +124,26 @@ function SkillCard({ category }: { category: SkillCategory }) {
           return (
             <li key={skill.name} className="flex items-center gap-3">
               <Icon
-                className={`h-4 w-4 shrink-0 ${category.accentColor} transition-transform duration-200 group-hover:scale-110`}
+                className={`h-4 w-4 shrink-0 ${category.accentColor}`}
                 aria-hidden="true"
               />
-              <span className="text-sm text-foreground/80">{skill.name}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm text-foreground/80">{skill.name}</span>
+                  <span className="text-[10px] font-mono text-muted">{skill.level}%</span>
+                </div>
+                <div className="mt-1 h-1 w-full rounded-full bg-border/50 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full animate-bar-fill ${barColorClass}`}
+                    style={{ width: `${skill.level}%` }}
+                    role="meter"
+                    aria-valuenow={skill.level}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${skill.name} proficiency: ${skill.level}%`}
+                  />
+                </div>
+              </div>
             </li>
           );
         })}

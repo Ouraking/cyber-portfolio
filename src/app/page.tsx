@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/sections/hero";
 import { PhilosophySection } from "@/components/sections/philosophy";
+import { StatsSection } from "@/components/sections/stats";
 import { SkillMatrixSection } from "@/components/sections/skill-matrix";
 import { LabWriteupsSection } from "@/components/sections/lab-writeups";
 import { RoadmapSection } from "@/components/sections/roadmap";
@@ -20,6 +21,8 @@ export default function Home() {
       <ScrollReveal>
         <PhilosophySection />
       </ScrollReveal>
+      <div className="section-divider" aria-hidden="true" />
+      <StatsSection />
       <div className="section-divider" aria-hidden="true" />
       <SkillMatrixSection />
       <div className="section-divider" aria-hidden="true" />

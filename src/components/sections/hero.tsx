@@ -136,7 +136,16 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+      {/* Subtle glow orb */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto max-w-5xl w-full flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
         {/* Text content */}
         <div className="flex-1 text-center lg:text-left space-y-6">
           <div

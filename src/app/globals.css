@@ -229,6 +229,21 @@ html {
    GRADIENT SECTION DIVIDERS
    ============================================ */
 .section-divider {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+.section-divider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 100% at 50% 50%, rgba(34,211,238,0.04), transparent);
+  pointer-events: none;
+}
+.section-divider::after {
+  content: '';
+  width: 100%;
   height: 1px;
   background: linear-gradient(
     90deg,
@@ -239,7 +254,17 @@ html {
   );
   background-size: 200% 100%;
   animation: shimmer 8s linear infinite;
-  opacity: 0.2;
+  opacity: 0.25;
+}
+
+/* ============================================
+   PROFICIENCY BAR ANIMATION
+   ============================================ */
+@keyframes bar-fill {
+  from { width: 0; }
+}
+.animate-bar-fill {
+  animation: bar-fill 1s ease-out forwards;
 }
 
 /* ============================================
@@ -264,7 +289,8 @@ html {
     transform: none !important;
   }
   .animate-pulse-subtle,
-  .section-divider {
+  .section-divider::after,
+  .animate-bar-fill {
     animation: none !important;
   }
 }

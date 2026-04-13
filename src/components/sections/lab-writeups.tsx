@@ -37,7 +37,6 @@ const PROJECTS: Project[] = [
       "Migrated a shipping company's on-premises infrastructure to Azure IaaS. Implemented department-specific RBAC, Key Vault access policies with soft delete and purge protection, encryption for data at rest and in transit, and automated backup configurations. Addressed insider threat risks and ensured compliance with FISMA, PCI-DSS, and NIST SP 800-53.",
     tags: ["Azure IaaS", "RBAC", "Key Vault", "FISMA", "PCI-DSS", "NIST 800-53"],
     repoUrl: "https://github.com/Ouraking/azure-cloud-security-project",
-    wide: true,
   },
   {
     title: "Security Audit & Compliance",
@@ -46,7 +45,6 @@ const PROJECTS: Project[] = [
       "Assessed a healthcare IT company's security posture against NIST SP 800-53 controls. Identified critical gaps in access control, continuous monitoring, and risk management. Developed remediation plans for least-privilege enforcement, SIEM deployment, and structured risk response. Designed PCI-DSS compliance strategy for payment card processing with role-based responsibilities.",
     tags: ["NIST 800-53", "PCI-DSS", "FISMA", "Risk Assessment", "SIEM", "RBAC"],
     repoUrl: "https://github.com/Ouraking/security-audit-compliance",
-    wide: true,
   },
   {
     title: "Zero Trust IAM for 40,000 Identities",
@@ -78,7 +76,7 @@ function ProjectCard({ project }: { project: Project }) {
         project.comingSoon
           ? "opacity-60"
           : "card-hover-lift glow-hover-cyan hover:border-accent-cyan/30"
-      } ${project.wide ? "sm:col-span-2" : ""}`}
+      } ${project.wide ? "sm:col-span-2" : ""} ${project.wide ? "border-l-2 border-l-accent-cyan/40" : ""}`}
     >
       {/* Coming soon overlay */}
       {project.comingSoon && (
@@ -167,7 +165,7 @@ export function LabWriteupsSection() {
         </ScrollReveal>
 
         {/* Bento grid */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2">
           {PROJECTS.map((project, index) => (
             <ScrollReveal key={project.title} delay={index * 100}>
               <ProjectCard project={project} />
