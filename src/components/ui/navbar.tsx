@@ -6,6 +6,7 @@ import { Shield, Menu, X } from "lucide-react";
 const NAV_LINKS = [
   { href: "#skills", label: "Skills" },
   { href: "#labs", label: "Labs" },
+  { href: "#learning", label: "Learning" },
   { href: "#roadmap", label: "Roadmap" },
   { href: "#contact", label: "Contact" },
 ] as const;

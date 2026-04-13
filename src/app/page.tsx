@@ -3,6 +3,7 @@ import { PhilosophySection } from "@/components/sections/philosophy";
 import { StatsSection } from "@/components/sections/stats";
 import { SkillMatrixSection } from "@/components/sections/skill-matrix";
 import { LabWriteupsSection } from "@/components/sections/lab-writeups";
+import { LearningLogSection } from "@/components/sections/learning-log";
 import { RoadmapSection } from "@/components/sections/roadmap";
 import { ContactSection } from "@/components/sections/contact";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -27,6 +28,8 @@ export default function Home() {
       <SkillMatrixSection />
       <div className="section-divider" aria-hidden="true" />
       <LabWriteupsSection />
+      <div className="section-divider" aria-hidden="true" />
+      <LearningLogSection />
       <div className="section-divider" aria-hidden="true" />
       <RoadmapSection />
       <div className="section-divider" aria-hidden="true" />

@@ -49,6 +49,7 @@ export function Footer() {
         <nav className="flex flex-wrap items-center justify-center gap-6" aria-label="Footer navigation">
           <a href="#skills" className="text-xs text-muted hover:text-accent-cyan transition-colors">Skills</a>
           <a href="#labs" className="text-xs text-muted hover:text-accent-cyan transition-colors">Projects</a>
+          <a href="#learning" className="text-xs text-muted hover:text-accent-cyan transition-colors">Learning</a>
           <a href="#roadmap" className="text-xs text-muted hover:text-accent-cyan transition-colors">Roadmap</a>
           <a href="#contact" className="text-xs text-muted hover:text-accent-cyan transition-colors">Contact</a>
         </nav>
