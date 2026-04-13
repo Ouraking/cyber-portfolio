@@ -132,7 +132,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-foreground">Availability</p>
-                  <p className="text-sm text-muted">Open to internships &amp; collaborations</p>
+                  <p className="text-sm text-muted">Open to full-time security roles</p>
                 </div>
               </div>
             </div>

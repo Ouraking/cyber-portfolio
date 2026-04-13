@@ -155,7 +155,7 @@ export function HeroSection() {
             style={{ transitionDelay: "0ms" }}
           >
             <TerminalIcon className="h-3 w-3" aria-hidden="true" />
-            <span>Available for internships &amp; collaborations</span>
+            <span>Open to Full-Time Security Engineering &amp; SOC Analyst Roles</span>
           </div>
 
           <h1

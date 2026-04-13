@@ -85,13 +85,15 @@ const CATEGORIES: SkillCategory[] = [
   },
   {
     title: "Tools & Platforms",
-    subtitle: "Infrastructure & Automation",
+    subtitle: "Rapid7 Ecosystem & Infrastructure",
     accentColor: "text-accent-cyan",
     borderColor: "border-accent-cyan/30",
     bgColor: "bg-accent-cyan/5",
     glowClass: "glow-hover-cyan",
     skills: [
       { name: "Rapid7 InsightVM", icon: ScanSearch, level: 93 },
+      { name: "Rapid7 InsightIDR", icon: Eye, level: 90 },
+      { name: "Rapid7 InsightAppSec", icon: ShieldCheck, level: 88 },
       { name: "Cloud (AWS, Azure, GCP)", icon: Cloud, level: 82 },
       { name: "Linux & Windows Admin", icon: Server, level: 85 },
       { name: "Scripting & Automation", icon: Terminal, level: 78 },

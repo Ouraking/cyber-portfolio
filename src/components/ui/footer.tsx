@@ -56,6 +56,20 @@ export function Footer() {
         {/* Separator */}
         <div className="my-6 border-t border-border/50" aria-hidden="true" />
 
+        {/* Availability banner */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-emerald" />
+          </span>
+          <span className="text-sm text-accent-emerald font-medium">
+            Open to Full-Time Security Engineering &amp; SOC Analyst Roles
+          </span>
+        </div>
+
+        {/* Separator */}
+        <div className="mb-6 border-t border-border/50" aria-hidden="true" />
+
         {/* Bottom tier: copyright + tagline */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-muted text-xs font-mono">
