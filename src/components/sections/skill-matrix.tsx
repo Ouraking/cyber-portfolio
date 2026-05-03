@@ -30,21 +30,22 @@ interface Skill {
 interface SkillCategory {
   title: string;
   subtitle: string;
-  /** Tailwind color class tokens */
-  accentColor: string;
-  borderColor: string;
-  bgColor: string;
+  accentClass: string;
+  borderClass: string;
+  bgClass: string;
+  barClass: string;
   glowClass: string;
   skills: Skill[];
 }
 
 const CATEGORIES: SkillCategory[] = [
   {
-    title: "Offensive Security",
+    title: "Offensive",
     subtitle: "Penetration Testing & Exploitation",
-    accentColor: "text-accent-red",
-    borderColor: "border-accent-red/30",
-    bgColor: "bg-accent-red/5",
+    accentClass: "text-accent-red",
+    borderClass: "border-accent-red/20",
+    bgClass: "bg-accent-red/5",
+    barClass: "bg-accent-red/70",
     glowClass: "glow-hover-red",
     skills: [
       { name: "Penetration Testing", icon: Swords, level: 82 },
@@ -55,26 +56,28 @@ const CATEGORIES: SkillCategory[] = [
     ],
   },
   {
-    title: "Defensive Security",
+    title: "Defensive",
     subtitle: "Detection, Response & Hardening",
-    accentColor: "text-accent-blue",
-    borderColor: "border-accent-blue/30",
-    bgColor: "bg-accent-blue/5",
+    accentClass: "text-accent-blue",
+    borderClass: "border-accent-blue/20",
+    bgClass: "bg-accent-blue/5",
+    barClass: "bg-accent-blue/70",
     glowClass: "glow-hover-blue",
     skills: [
       { name: "Incident Response", icon: ShieldCheck, level: 85 },
-      { name: "Threat Detection & Analysis", icon: Eye, level: 90 },
+      { name: "Threat Detection", icon: Eye, level: 90 },
       { name: "SIEM Configuration", icon: Activity, level: 83 },
       { name: "Endpoint Protection", icon: Lock, level: 80 },
       { name: "Network Monitoring", icon: Radio, level: 87 },
     ],
   },
   {
-    title: "GRC & Compliance",
+    title: "GRC",
     subtitle: "Governance, Risk & Regulatory",
-    accentColor: "text-accent-amber",
-    borderColor: "border-accent-amber/30",
-    bgColor: "bg-accent-amber/5",
+    accentClass: "text-accent-amber",
+    borderClass: "border-accent-amber/20",
+    bgClass: "bg-accent-amber/5",
+    barClass: "bg-accent-amber/70",
     glowClass: "glow-hover-amber",
     skills: [
       { name: "Risk Management", icon: Scale, level: 88 },
@@ -84,11 +87,12 @@ const CATEGORIES: SkillCategory[] = [
     ],
   },
   {
-    title: "Tools & Platforms",
-    subtitle: "Rapid7 Ecosystem & Infrastructure",
-    accentColor: "text-accent-cyan",
-    borderColor: "border-accent-cyan/30",
-    bgColor: "bg-accent-cyan/5",
+    title: "Tools",
+    subtitle: "Rapid7 & Infrastructure",
+    accentClass: "text-accent",
+    borderClass: "border-accent/20",
+    bgClass: "bg-accent/5",
+    barClass: "bg-accent/70",
     glowClass: "glow-hover-cyan",
     skills: [
       { name: "Rapid7 InsightVM", icon: ScanSearch, level: 93 },
@@ -101,42 +105,39 @@ const CATEGORIES: SkillCategory[] = [
   },
 ];
 
-const BAR_COLORS: Record<string, string> = {
-  "Offensive Security": "bg-accent-red/60",
-  "Defensive Security": "bg-accent-blue/60",
-  "GRC & Compliance": "bg-accent-amber/60",
-  "Tools & Platforms": "bg-accent-cyan/60",
-};
-
 function SkillCard({ category }: { category: SkillCategory }) {
-  const barColorClass = BAR_COLORS[category.title] ?? "bg-accent-cyan/60";
-
   return (
     <div
-      className={`group rounded-xl border ${category.borderColor} ${category.bgColor} p-6 card-hover-lift ${category.glowClass}`}
+      className={`group rounded-2xl border ${category.borderClass} ${category.bgClass} p-6 card-hover-lift ${category.glowClass}`}
     >
-      <h3 className={`text-lg font-semibold ${category.accentColor}`}>
-        {category.title}
-      </h3>
-      <p className="mt-1 text-xs text-muted">{category.subtitle}</p>
+      {/* Header */}
+      <div className="mb-5">
+        <h3 className={`text-base font-semibold ${category.accentClass}`}>
+          {category.title}
+        </h3>
+        <p className="mt-0.5 text-[11px] text-muted tracking-wide">{category.subtitle}</p>
+      </div>
 
-      <ul className="mt-5 space-y-3" role="list">
+      {/* Skills */}
+      <ul className="space-y-3.5" role="list">
         {category.skills.map((skill) => {
           const Icon = skill.icon;
           return (
             <li key={skill.name} className="flex items-center gap-3">
               <Icon
-                className={`h-4 w-4 shrink-0 ${category.accentColor}`}
+                className={`h-3.5 w-3.5 shrink-0 ${category.accentClass} opacity-80`}
                 aria-hidden="true"
               />
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm text-foreground/80">{skill.name}</span>
-                  <span className="text-[10px] font-mono text-muted">{skill.level}%</span>
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <span className="text-xs text-foreground/80 truncate">{skill.name}</span>
+                  <span className={`text-[10px] font-mono ${category.accentClass} shrink-0`}>
+                    {skill.level}%
+                  </span>
                 </div>
-                <div className="mt-1 h-1 w-full rounded-full bg-border/50 overflow-hidden">
+                <div className="h-0.5 w-full rounded-full bg-border-light overflow-hidden">
                   <div
-                    className={`h-full rounded-full animate-bar-fill ${barColorClass}`}
+                    className={`h-full rounded-full animate-bar-fill ${category.barClass}`}
                     style={{ width: `${skill.level}%` }}
                     role="meter"
                     aria-valuenow={skill.level}
@@ -158,30 +159,33 @@ export function SkillMatrixSection() {
   return (
     <section
       id="skills"
-      className="px-6 py-24"
+      className="px-6 py-24 relative"
       aria-labelledby="skills-heading"
     >
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
         <ScrollReveal>
-          <div className="text-center mb-12">
+          <div className="mb-14">
+            <p className="font-mono text-xs text-accent/70 tracking-[0.2em] uppercase mb-3">
+              Capabilities
+            </p>
             <h2
               id="skills-heading"
-              className="text-3xl font-bold tracking-tight text-foreground"
+              className="text-3xl font-bold tracking-tight text-foreground text-balance"
             >
               Skill Matrix
             </h2>
-            <p className="mt-3 text-muted max-w-md mx-auto">
-              Capabilities organized by security domain — from offensive
-              operations to governance and tooling.
+            <p className="mt-3 text-muted-light max-w-lg leading-relaxed">
+              Capabilities organized by security domain — from offensive operations
+              to governance and tooling.
             </p>
           </div>
         </ScrollReveal>
 
-        {/* Grid of skill categories */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Grid */}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {CATEGORIES.map((cat, index) => (
-            <ScrollReveal key={cat.title} delay={index * 120}>
+            <ScrollReveal key={cat.title} delay={index * 100}>
               <SkillCard category={cat} />
             </ScrollReveal>
           ))}

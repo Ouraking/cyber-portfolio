@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, GraduationCap, GitBranch, Lock } from "lucide-react";
+import { ExternalLink, GraduationCap, GitBranch, ArrowUpRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface Project {
@@ -9,17 +9,10 @@ interface Project {
   methodology: string;
   tags: string[];
   repoUrl?: string;
-  /** Controls card span on larger screens for a bento-box effect */
   wide?: boolean;
-  /** Whether this project has full content or is a coming-soon placeholder */
   comingSoon?: boolean;
 }
 
-/**
- * Masters in Cybersecurity Projects
- * SECURITY NOTE: URLs are hardcoded, not sourced from user input or query params.
- * All external links use rel="noopener noreferrer" to prevent tab-nabbing.
- */
 const PROJECTS: Project[] = [
   {
     title: "Secure Network Design",
@@ -34,7 +27,7 @@ const PROJECTS: Project[] = [
     title: "Cloud Security Implementation",
     category: "Cloud Security",
     methodology:
-      "Migrated a shipping company's on-premises infrastructure to Azure IaaS. Implemented department-specific RBAC, Key Vault access policies with soft delete and purge protection, encryption for data at rest and in transit, and automated backup configurations. Addressed insider threat risks and ensured compliance with FISMA, PCI-DSS, and NIST SP 800-53.",
+      "Migrated a shipping company's on-premises infrastructure to Azure IaaS. Implemented department-specific RBAC, Key Vault access policies with soft delete and purge protection, encryption for data at rest and in transit, and automated backup configurations.",
     tags: ["Azure IaaS", "RBAC", "Key Vault", "FISMA", "PCI-DSS", "NIST 800-53"],
     repoUrl: "https://github.com/Ouraking/azure-cloud-security-project",
   },
@@ -42,7 +35,7 @@ const PROJECTS: Project[] = [
     title: "Security Audit & Compliance",
     category: "GRC",
     methodology:
-      "Assessed a healthcare IT company's security posture against NIST SP 800-53 controls. Identified critical gaps in access control, continuous monitoring, and risk management. Developed remediation plans for least-privilege enforcement, SIEM deployment, and structured risk response. Designed PCI-DSS compliance strategy for payment card processing with role-based responsibilities.",
+      "Assessed a healthcare IT company's security posture against NIST SP 800-53 controls. Identified critical gaps in access control, continuous monitoring, and risk management. Developed remediation plans for least-privilege enforcement and SIEM deployment.",
     tags: ["NIST 800-53", "PCI-DSS", "FISMA", "Risk Assessment", "SIEM", "RBAC"],
     repoUrl: "https://github.com/Ouraking/security-audit-compliance",
   },
@@ -50,90 +43,115 @@ const PROJECTS: Project[] = [
     title: "Zero Trust IAM for 40,000 Identities",
     category: "Capstone",
     methodology:
-      "Designed and validated a centralized Identity and Access Management solution using Microsoft Entra ID for a university with 40,000+ students. Deployed 25 simulated identities, configured four Conditional Access policies enforcing MFA, and built a PowerShell bulk provisioning template for full-scale rollout. Achieved 100% policy enforcement with zero failures. Aligned with NIST CSF 2.0, ISO/IEC 27001:2022, and NIST SP 800-207 Zero Trust Architecture.",
+      "Designed and validated a centralized Identity and Access Management solution using Microsoft Entra ID for a university with 40,000+ students. Deployed 25 simulated identities, configured four Conditional Access policies enforcing MFA. Achieved 100% policy enforcement with zero failures.",
     tags: ["Zero Trust", "Microsoft Entra ID", "MFA", "Conditional Access", "NIST CSF 2.0", "ISO 27001", "PowerShell"],
     repoUrl: "https://github.com/Ouraking/zero-trust-architecture-phase1",
     wide: true,
   },
 ];
 
-const CATEGORY_COLORS: Record<string, string> = {
-  "Network Security": "bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30",
-  "Cloud Security": "bg-accent-blue/10 text-accent-blue border-accent-blue/30",
-  "Red Team": "bg-accent-red/10 text-accent-red border-accent-red/30",
-  "Blue Team": "bg-accent-blue/10 text-accent-blue border-accent-blue/30",
-  "Application Security": "bg-accent-emerald/10 text-accent-emerald border-accent-emerald/30",
-  GRC: "bg-accent-amber/10 text-accent-amber border-accent-amber/30",
-  Capstone: "bg-purple-500/10 text-purple-400 border-purple-500/30",
+const CATEGORY_STYLE: Record<
+  string,
+  { text: string; border: string; bg: string }
+> = {
+  "Network Security": {
+    text: "text-accent",
+    border: "border-accent/25",
+    bg: "bg-accent/8",
+  },
+  "Cloud Security": {
+    text: "text-accent-blue",
+    border: "border-accent-blue/25",
+    bg: "bg-accent-blue/8",
+  },
+  "Red Team": {
+    text: "text-accent-red",
+    border: "border-accent-red/25",
+    bg: "bg-accent-red/8",
+  },
+  GRC: {
+    text: "text-accent-amber",
+    border: "border-accent-amber/25",
+    bg: "bg-accent-amber/8",
+  },
+  Capstone: {
+    text: "text-accent-violet",
+    border: "border-accent-violet/25",
+    bg: "bg-accent-violet/8",
+  },
 };
 
 function ProjectCard({ project }: { project: Project }) {
-  const colorClasses = CATEGORY_COLORS[project.category] ?? "bg-border text-muted border-border";
+  const style = CATEGORY_STYLE[project.category] ?? {
+    text: "text-muted",
+    border: "border-border",
+    bg: "bg-card",
+  };
 
   return (
     <article
-      className={`group relative rounded-xl border border-border bg-card p-6 ${
-        project.comingSoon
-          ? "opacity-60"
-          : "card-hover-lift glow-hover-cyan hover:border-accent-cyan/30"
-      } ${project.wide ? "sm:col-span-2" : ""} ${project.wide ? "border-l-2 border-l-accent-cyan/40" : ""}`}
+      className={`group relative rounded-2xl border border-border-light bg-card/50 p-6 card-hover-lift glow-hover-cyan overflow-hidden flex flex-col ${
+        project.wide ? "sm:col-span-2" : ""
+      }`}
     >
-      {/* Coming soon overlay */}
-      {project.comingSoon && (
-        <div className="absolute top-3 right-3">
-          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/80 px-2.5 py-0.5 text-[10px] font-mono text-muted animate-pulse-subtle">
-            <Lock className="h-3 w-3" aria-hidden="true" />
-            Coming Soon
-          </span>
-        </div>
-      )}
+      {/* Hover accent line top */}
+      <div
+        className={`absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+          project.category === "Capstone"
+            ? "bg-gradient-to-r from-transparent via-accent-violet/60 to-transparent"
+            : "bg-gradient-to-r from-transparent via-accent/40 to-transparent"
+        }`}
+        aria-hidden="true"
+      />
 
-      {/* Header */}
-      <div className="flex items-start justify-between gap-3">
+      {/* Header row */}
+      <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-2.5">
-          <GraduationCap
-            className="h-4 w-4 text-accent-cyan shrink-0"
-            aria-hidden="true"
-          />
-          <h3 className="text-base font-semibold text-foreground">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 border border-accent/20">
+            <GraduationCap className="h-4 w-4 text-accent" aria-hidden="true" />
+          </div>
+          <h3 className="text-sm font-semibold text-foreground leading-tight">
             {project.title}
           </h3>
         </div>
         <span
-          className={`shrink-0 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${colorClasses}`}
+          className={`shrink-0 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${style.text} ${style.border} ${style.bg}`}
         >
           {project.category}
         </span>
       </div>
 
-      {/* Methodology */}
-      <p className="mt-3 text-sm text-muted leading-relaxed">
+      {/* Description */}
+      <p className="text-sm text-muted-light leading-relaxed flex-1">
         {project.methodology}
       </p>
 
       {/* Tags */}
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-1.5">
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-md bg-border/50 px-2 py-0.5 text-[11px] font-mono text-muted"
+            className="rounded-md border border-border-light bg-surface/60 px-2 py-0.5 text-[11px] font-mono text-muted"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      {/* Repo link — only show if not coming soon and has a URL */}
-      {!project.comingSoon && project.repoUrl && (
+      {/* Repo link */}
+      {project.repoUrl && (
         <a
           href={project.repoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent-cyan transition-colors hover:text-accent-emerald focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan rounded"
+          className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-accent/70 hover:text-accent transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded w-fit"
         >
-          <GitBranch className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+          <GitBranch className="h-3 w-3" aria-hidden="true" />
           View Repository
-          <ExternalLink className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+          <ArrowUpRight
+            className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-hidden="true"
+          />
         </a>
       )}
     </article>
@@ -144,20 +162,33 @@ export function LabWriteupsSection() {
   return (
     <section
       id="labs"
-      className="px-6 py-24 bg-card/50"
+      className="px-6 py-24 relative"
       aria-labelledby="labs-heading"
     >
-      <div className="mx-auto max-w-6xl">
+      {/* Background tint */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(0,229,255,0.025) 0%, transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-6xl">
         {/* Section header */}
         <ScrollReveal>
-          <div className="text-center mb-12">
+          <div className="mb-14">
+            <p className="font-mono text-xs text-accent/70 tracking-[0.2em] uppercase mb-3">
+              Portfolio
+            </p>
             <h2
               id="labs-heading"
-              className="text-3xl font-bold tracking-tight text-foreground"
+              className="text-3xl font-bold tracking-tight text-foreground text-balance"
             >
               My Projects
             </h2>
-            <p className="mt-3 text-muted max-w-lg mx-auto">
+            <p className="mt-3 text-muted-light max-w-lg leading-relaxed">
               Applied cybersecurity projects showcasing hands-on security
               engineering, analysis, and governance.
             </p>
@@ -165,9 +196,9 @@ export function LabWriteupsSection() {
         </ScrollReveal>
 
         {/* Bento grid */}
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           {PROJECTS.map((project, index) => (
-            <ScrollReveal key={project.title} delay={index * 100}>
+            <ScrollReveal key={project.title} delay={index * 90}>
               <ProjectCard project={project} />
             </ScrollReveal>
           ))}

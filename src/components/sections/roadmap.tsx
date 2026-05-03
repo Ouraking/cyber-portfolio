@@ -10,7 +10,6 @@ interface Milestone {
   description: string;
   date: string;
   status: MilestoneStatus;
-  /** Optional list of individual certs within a grouped milestone */
   items?: string[];
 }
 
@@ -65,21 +64,27 @@ const MILESTONES: Milestone[] = [
 
 const STATUS_CONFIG: Record<
   MilestoneStatus,
-  { icon: typeof CheckCircle2; color: string; label: string }
+  { icon: typeof CheckCircle2; colorClass: string; borderClass: string; bgClass: string; label: string }
 > = {
   completed: {
     icon: CheckCircle2,
-    color: "text-accent-emerald",
+    colorClass: "text-accent-emerald",
+    borderClass: "border-accent-emerald/30",
+    bgClass: "bg-accent-emerald/10",
     label: "Completed",
   },
   "in-progress": {
     icon: Target,
-    color: "text-accent-cyan",
+    colorClass: "text-accent",
+    borderClass: "border-accent/30",
+    bgClass: "bg-accent/10",
     label: "In Progress",
   },
   planned: {
     icon: Circle,
-    color: "text-muted",
+    colorClass: "text-muted",
+    borderClass: "border-border-light",
+    bgClass: "bg-surface",
     label: "Planned",
   },
 };
@@ -95,67 +100,55 @@ function TimelineMilestone({
   const Icon = config.icon;
 
   return (
-    <div className="relative flex gap-6">
-      {/* Vertical line + icon */}
+    <div className="relative flex gap-5">
+      {/* Icon + line */}
       <div className="flex flex-col items-center">
         <div
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border ${
-            milestone.status === "completed"
-              ? "border-accent-emerald/30 bg-accent-emerald/10"
-              : milestone.status === "in-progress"
-              ? "border-accent-cyan/30 bg-accent-cyan/10 glow-cyan"
-              : "border-border bg-card"
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border ${config.borderClass} ${config.bgClass} ${
+            milestone.status === "in-progress" ? "animate-glow-pulse" : ""
           }`}
         >
-          <Icon className={`h-5 w-5 ${config.color}`} aria-hidden="true" />
+          <Icon className={`h-4 w-4 ${config.colorClass}`} aria-hidden="true" />
         </div>
         {!isLast && (
           <div
-            className={`w-px flex-1 ${
+            className={`w-px flex-1 mt-1 min-h-[24px] ${
               milestone.status === "completed"
-                ? "bg-accent-emerald/30"
+                ? "bg-accent-emerald/25"
                 : milestone.status === "in-progress"
-                ? "bg-gradient-to-b from-accent-cyan/30 to-border/50"
-                : "bg-border/50"
+                ? "bg-gradient-to-b from-accent/25 to-border-light/40"
+                : "bg-border-light/30"
             }`}
             aria-hidden="true"
           />
         )}
       </div>
 
-      {/* Content */}
-      <div className={`pb-10 ${isLast ? "pb-0" : ""}`}>
-        <div className="rounded-lg border border-border/50 bg-card/30 p-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <h3 className="text-base font-semibold text-foreground">
-              {milestone.title}
-            </h3>
+      {/* Card */}
+      <div className={`group pb-8 ${isLast ? "pb-0" : ""} flex-1 min-w-0`}>
+        <div className="rounded-2xl border border-border-light bg-card/50 p-5 card-hover-lift hover:border-border-light/80">
+          {/* Title + status badge */}
+          <div className="flex flex-wrap items-center gap-2.5 mb-2">
+            <h3 className="text-sm font-semibold text-foreground">{milestone.title}</h3>
             <span
-              className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${
-                milestone.status === "completed"
-                  ? "border-accent-emerald/30 text-accent-emerald"
-                  : milestone.status === "in-progress"
-                  ? "border-accent-cyan/30 text-accent-cyan"
-                  : "border-border text-muted"
-              }`}
+              className={`rounded-full border px-2.5 py-0.5 text-[10px] font-mono ${config.colorClass} ${config.borderClass}`}
             >
               {config.label}
             </span>
           </div>
-          <p className="mt-1 text-sm text-muted leading-relaxed max-w-md">
-            {milestone.description}
-          </p>
 
-          {/* Render individual cert badges when grouped */}
+          <p className="text-xs text-muted-light leading-relaxed">{milestone.description}</p>
+
+          {/* Cert badges */}
           {milestone.items && milestone.items.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {milestone.items.map((item) => (
                 <span
                   key={item}
-                  className={`rounded-md border px-2.5 py-1 text-xs font-mono ${
+                  className={`rounded-md border px-2 py-1 text-[10px] font-mono ${
                     milestone.status === "completed"
                       ? "border-accent-emerald/20 bg-accent-emerald/5 text-accent-emerald"
-                      : "border-border bg-card text-muted"
+                      : "border-border-light bg-surface text-muted"
                   }`}
                 >
                   {item}
@@ -164,9 +157,8 @@ function TimelineMilestone({
             </div>
           )}
 
-          <span className="mt-2 inline-block text-xs font-mono text-muted/60">
-            {milestone.date}
-          </span>
+          {/* Date */}
+          <p className="mt-3 text-[10px] font-mono text-muted/50">{milestone.date}</p>
         </div>
       </div>
     </div>
@@ -183,15 +175,19 @@ export function RoadmapSection() {
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
         <ScrollReveal>
-          <div className="text-center mb-12">
+          <div className="mb-14">
+            <p className="font-mono text-xs text-accent/70 tracking-[0.2em] uppercase mb-3">
+              Certifications
+            </p>
             <h2
               id="roadmap-heading"
-              className="text-3xl font-bold tracking-tight text-foreground"
+              className="text-3xl font-bold tracking-tight text-foreground text-balance"
             >
               Security Roadmap
             </h2>
-            <p className="mt-3 text-muted max-w-md mx-auto">
-              Certifications earned, in progress, and on the horizon.
+            <p className="mt-3 text-muted-light max-w-lg leading-relaxed">
+              Certifications earned, in progress, and on the horizon — mapping the
+              journey from foundations to elite offensive security.
             </p>
           </div>
         </ScrollReveal>
@@ -199,11 +195,12 @@ export function RoadmapSection() {
         {/* Timeline */}
         <div className="mx-auto max-w-2xl">
           {MILESTONES.map((m, i) => (
-            <ScrollReveal key={m.title} delay={i * 150} animation="animate-slide-in-left">
-              <TimelineMilestone
-                milestone={m}
-                isLast={i === MILESTONES.length - 1}
-              />
+            <ScrollReveal
+              key={m.title}
+              delay={i * 120}
+              animation="animate-slide-in-left"
+            >
+              <TimelineMilestone milestone={m} isLast={i === MILESTONES.length - 1} />
             </ScrollReveal>
           ))}
         </div>

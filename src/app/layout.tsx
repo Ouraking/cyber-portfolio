@@ -1,29 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/ui/navbar";
 import { Footer } from "@/components/ui/footer";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
-/**
- * SECURITY NOTE: Metadata is statically defined — not derived from user input or
- * query parameters. This prevents meta-tag injection and open-redirect via og:url.
- * The CSP-equivalent headers should be configured in next.config.ts for production.
- */
 export const metadata: Metadata = {
-  title: "Security Portfolio | Cybersecurity Researcher",
+  title: "Koffi Jean-Marie Amedjonekou | Cybersecurity Engineer",
   description:
-    "Portfolio of a cybersecurity student showcasing security research, penetration testing methodology, and defensive security projects.",
+    "Cybersecurity portfolio — penetration testing, vulnerability management, cloud security, and governance frameworks. Open to full-time security engineering roles.",
   robots: "index, follow",
+  themeColor: "#050810",
+  openGraph: {
+    title: "Koffi Jean-Marie Amedjonekou | Cybersecurity Engineer",
+    description:
+      "Cybersecurity portfolio showcasing hands-on security engineering, analysis, and governance.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -32,15 +36,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // lang attribute for accessibility; dark class forces dark mode
-    <html lang="en" className="dark">
+    <html lang="en" className="dark bg-background">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}
       >
-        {/* Skip-to-content link for keyboard/screen reader users (WCAG 2.4.1) */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-accent-cyan focus:px-4 focus:py-2 focus:text-background focus:outline-none"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-accent focus:px-4 focus:py-2 focus:text-background focus:outline-none"
         >
           Skip to main content
         </a>
