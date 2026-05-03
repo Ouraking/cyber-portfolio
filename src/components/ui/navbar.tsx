@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Hexagon } from "lucide-react";
 
 const NAV_LINKS = [
+  { href: "#about",     label: "About" },
   { href: "#skills",    label: "Skills" },
   { href: "#labs",      label: "Projects" },
   { href: "#learning",  label: "Learning" },

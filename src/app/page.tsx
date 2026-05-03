@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/sections/hero";
+import { AboutSection } from "@/components/sections/about";
 import { PhilosophySection } from "@/components/sections/philosophy";
 import { StatsSection } from "@/components/sections/stats";
 import { SkillMatrixSection } from "@/components/sections/skill-matrix";
@@ -18,6 +19,10 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <div className="section-divider" aria-hidden="true" />
+      <ScrollReveal>
+        <AboutSection />
+      </ScrollReveal>
       <div className="section-divider" aria-hidden="true" />
       <ScrollReveal>
         <PhilosophySection />
