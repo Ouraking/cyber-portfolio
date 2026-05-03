@@ -117,7 +117,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} Koffi Jean-Marie Amedjonekou
           </p>
           <p className="text-xs text-muted/60">
-            Built with Next.js &middot; Secured by design &middot; No tracking scripts
+            Secured by design &middot; No tracking scripts
           </p>
         </div>
       </div>
