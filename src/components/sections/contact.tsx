@@ -142,7 +142,7 @@ export function ContactSection() {
                 <div
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${bg} ${color}`}
                 >
-                  <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+                  <Icon className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-muted mb-0.5">{label}</p>

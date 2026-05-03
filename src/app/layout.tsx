@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/ui/navbar";
 import { Footer } from "@/components/ui/footer";
@@ -21,13 +21,16 @@ export const metadata: Metadata = {
   description:
     "Cybersecurity portfolio — penetration testing, vulnerability management, cloud security, and governance frameworks. Open to full-time security engineering roles.",
   robots: "index, follow",
-  themeColor: "#050810",
   openGraph: {
     title: "Koffi Jean-Marie Amedjonekou | Cybersecurity Engineer",
     description:
       "Cybersecurity portfolio showcasing hands-on security engineering, analysis, and governance.",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050810",
 };
 
 export default function RootLayout({

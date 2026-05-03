@@ -130,16 +130,19 @@ function FloatingBadge({
   sub,
   color,
   className,
+  style,
 }: {
   icon: React.ElementType;
   label: string;
   sub: string;
   color: string;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
       className={`absolute hidden lg:flex items-center gap-2.5 rounded-xl border border-border-light bg-card/90 backdrop-blur-sm px-3 py-2.5 shadow-xl animate-float ${className}`}
+      style={style}
       aria-hidden="true"
     >
       <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${color}`}>
