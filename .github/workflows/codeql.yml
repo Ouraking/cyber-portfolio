@@ -1,0 +1,46 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Weekly re-scan so new query rules apply to unchanged code.
+    - cron: "0 6 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Required to upload results to the Security tab.
+      security-events: write
+      contents: read
+      actions: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # build-mode "none" is correct for JS/TS: CodeQL extracts source
+          # directly and needs no compilation or installed dependencies.
+          - language: javascript-typescript
+            build-mode: none
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
