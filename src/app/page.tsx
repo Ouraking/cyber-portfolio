@@ -6,12 +6,14 @@ import { LabWriteupsSection } from "@/components/sections/lab-writeups";
 import { LearningLogSection } from "@/components/sections/learning-log";
 import { RoadmapSection } from "@/components/sections/roadmap";
 import { ContactSection } from "@/components/sections/contact";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 /**
  * Home page — single-page portfolio layout.
  * Each section is a self-contained component for maintainability.
- * ScrollReveal wraps sections for scroll-triggered entrance animations.
+ * Sections own their own ScrollReveal wrappers so that reveal animations never
+ * wrap an entire section: ScrollReveal leaves a non-none `transform` on its
+ * wrapper, which would become the containing block for any `position: fixed`
+ * descendant (see the toast in contact.tsx).
  * Section dividers add subtle gradient lines between content areas.
  */
 export default function Home() {
@@ -19,9 +21,7 @@ export default function Home() {
     <>
       <HeroSection />
       <div className="section-divider" aria-hidden="true" />
-      <ScrollReveal>
-        <PhilosophySection />
-      </ScrollReveal>
+      <PhilosophySection />
       <div className="section-divider" aria-hidden="true" />
       <StatsSection />
       <div className="section-divider" aria-hidden="true" />
@@ -33,9 +33,7 @@ export default function Home() {
       <div className="section-divider" aria-hidden="true" />
       <RoadmapSection />
       <div className="section-divider" aria-hidden="true" />
-      <ScrollReveal>
-        <ContactSection />
-      </ScrollReveal>
+      <ContactSection />
     </>
   );
 }
