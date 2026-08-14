@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, GraduationCap, GitBranch, Lock } from "lucide-react";
+import { ExternalLink, GraduationCap, GitBranch } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface Project {
@@ -11,8 +11,6 @@ interface Project {
   repoUrl?: string;
   /** Controls card span on larger screens for a bento-box effect */
   wide?: boolean;
-  /** Whether this project has full content or is a coming-soon placeholder */
-  comingSoon?: boolean;
 }
 
 /**
@@ -57,12 +55,10 @@ const PROJECTS: Project[] = [
   },
 ];
 
+/** One entry per category actually used in PROJECTS above. */
 const CATEGORY_COLORS: Record<string, string> = {
   "Network Security": "bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30",
   "Cloud Security": "bg-accent-blue/10 text-accent-blue border-accent-blue/30",
-  "Red Team": "bg-accent-red/10 text-accent-red border-accent-red/30",
-  "Blue Team": "bg-accent-blue/10 text-accent-blue border-accent-blue/30",
-  "Application Security": "bg-accent-emerald/10 text-accent-emerald border-accent-emerald/30",
   GRC: "bg-accent-amber/10 text-accent-amber border-accent-amber/30",
   Capstone: "bg-purple-500/10 text-purple-400 border-purple-500/30",
 };
@@ -72,22 +68,10 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <article
-      className={`group relative rounded-xl border border-border bg-card p-6 ${
-        project.comingSoon
-          ? "opacity-60"
-          : "card-hover-lift glow-hover-cyan hover:border-accent-cyan/30"
-      } ${project.wide ? "sm:col-span-2" : ""} ${project.wide ? "border-l-2 border-l-accent-cyan/40" : ""}`}
+      className={`group relative rounded-xl border border-border bg-card p-6 card-hover-lift glow-hover-cyan hover:border-accent-cyan/30 ${
+        project.wide ? "sm:col-span-2 border-l-2 border-l-accent-cyan/40" : ""
+      }`}
     >
-      {/* Coming soon overlay */}
-      {project.comingSoon && (
-        <div className="absolute top-3 right-3">
-          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/80 px-2.5 py-0.5 text-[10px] font-mono text-muted animate-pulse-subtle">
-            <Lock className="h-3 w-3" aria-hidden="true" />
-            Coming Soon
-          </span>
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
@@ -123,8 +107,8 @@ function ProjectCard({ project }: { project: Project }) {
         ))}
       </div>
 
-      {/* Repo link — only show if not coming soon and has a URL */}
-      {!project.comingSoon && project.repoUrl && (
+      {/* Repo link — only shown when the project has a public repository */}
+      {project.repoUrl && (
         <a
           href={project.repoUrl}
           target="_blank"

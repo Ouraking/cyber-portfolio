@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Terminal as TerminalIcon, ChevronRight } from "lucide-react";
 
 /**
@@ -17,15 +17,17 @@ const TERMINAL_LINES = [
 
 function LiveTerminal() {
   const [currentLine, setCurrentLine] = useState(0);
-  const [phase, setPhase] = useState<"typing" | "output" | "done">("typing");
+  const [phase, setPhase] = useState<"typing" | "output">("typing");
   const [typedChars, setTypedChars] = useState(0);
   const [completedLines, setCompletedLines] = useState<number[]>([]);
 
+  // "Done" is derived rather than stored. Keeping it as a third `phase` value
+  // meant the effect had to setState synchronously on its own dependency,
+  // which cascades an extra render for no gain (react-hooks/set-state-in-effect).
+  const isDone = currentLine >= TERMINAL_LINES.length;
+
   useEffect(() => {
-    if (currentLine >= TERMINAL_LINES.length) {
-      setPhase("done");
-      return;
-    }
+    if (isDone) return;
 
     const line = TERMINAL_LINES[currentLine];
 
@@ -54,7 +56,7 @@ function LiveTerminal() {
       }, line.delay);
       return () => clearTimeout(timeout);
     }
-  }, [currentLine, phase, typedChars]);
+  }, [currentLine, phase, typedChars, isDone]);
 
   return (
     <div
@@ -102,7 +104,7 @@ function LiveTerminal() {
         )}
 
         {/* Final cursor after all lines are done */}
-        {phase === "done" && (
+        {isDone && (
           <div className="flex items-center gap-1 text-accent-emerald">
             <ChevronRight className="h-3 w-3" aria-hidden="true" />
             <span className="inline-block w-2 h-4 bg-accent-cyan animate-blink" aria-hidden="true" />
@@ -113,13 +115,13 @@ function LiveTerminal() {
   );
 }
 
+/**
+ * Entrance is pure CSS (see .animate-reveal-in in globals.css) rather than a
+ * `mounted` state flag toggled from an effect. The flag forced a second render
+ * on every load purely to start an animation, and tripped
+ * react-hooks/set-state-in-effect. CSS animations already start on first paint.
+ */
 export function HeroSection() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
     <section
       className="relative min-h-screen flex items-center justify-center px-6 pt-24 pb-16"
@@ -149,10 +151,8 @@ export function HeroSection() {
         {/* Text content */}
         <div className="flex-1 text-center lg:text-left space-y-6">
           <div
-            className={`inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs font-mono text-accent-cyan transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: "0ms" }}
+            className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs font-mono text-accent-cyan animate-reveal-in"
+            style={{ animationDelay: "0ms" }}
           >
             <TerminalIcon className="h-3 w-3" aria-hidden="true" />
             <span>Open to Full-Time Security Engineering &amp; SOC Analyst Roles</span>
@@ -160,10 +160,8 @@ export function HeroSection() {
 
           <h1
             id="hero-heading"
-            className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: "150ms" }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight animate-reveal-in"
+            style={{ animationDelay: "150ms" }}
           >
             <span className="text-foreground">Koffi Jean-Marie</span>
             <br />
@@ -171,19 +169,15 @@ export function HeroSection() {
           </h1>
 
           <p
-            className={`text-xl sm:text-2xl font-medium text-accent-cyan font-mono tracking-wide transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: "250ms" }}
+            className="text-xl sm:text-2xl font-medium text-accent-cyan font-mono tracking-wide animate-reveal-in"
+            style={{ animationDelay: "250ms" }}
           >
             Cybersecurity Engineer
           </p>
 
           <p
-            className={`max-w-lg text-lg text-muted leading-relaxed mx-auto lg:mx-0 transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: "350ms" }}
+            className="max-w-lg text-lg text-muted leading-relaxed mx-auto lg:mx-0 animate-reveal-in"
+            style={{ animationDelay: "350ms" }}
           >
             Dedicated cybersecurity professional with hands-on expertise across
             penetration testing, vulnerability management, cloud security, and
@@ -192,10 +186,8 @@ export function HeroSection() {
           </p>
 
           <div
-            className={`flex flex-wrap gap-4 justify-center lg:justify-start transition-all duration-700 ease-out ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: "450ms" }}
+            className="flex flex-wrap gap-4 justify-center lg:justify-start animate-reveal-in"
+            style={{ animationDelay: "450ms" }}
           >
             <a
               href="#labs"
@@ -214,10 +206,8 @@ export function HeroSection() {
 
         {/* Terminal widget */}
         <div
-          className={`flex-1 flex justify-center lg:justify-end w-full transition-all duration-700 ease-out ${
-            mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "550ms" }}
+          className="flex-1 flex justify-center lg:justify-end w-full animate-reveal-in"
+          style={{ animationDelay: "550ms" }}
         >
           <LiveTerminal />
         </div>

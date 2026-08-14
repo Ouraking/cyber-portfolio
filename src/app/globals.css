@@ -13,7 +13,6 @@
   --color-muted: #64748b;            /* slate-500 */
   --color-border: #1e293b;           /* slate-800 */
   --color-card: #0f172a;             /* slate-900 */
-  --color-card-hover: #1e293b;       /* slate-800 */
 
   /* Accent palette */
   --color-accent-cyan: #22d3ee;      /* cyan-400 */
@@ -55,9 +54,6 @@ html {
 .glow-cyan {
   box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
 }
-.glow-emerald {
-  box-shadow: 0 0 20px rgba(52, 211, 153, 0.15);
-}
 
 /* Blinking cursor for terminal */
 @keyframes blink {
@@ -87,6 +83,17 @@ html {
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
+/*
+ * Staggered hero entrance, driven entirely by CSS so the hero needs no
+ * `mounted` state flag. The explicit `opacity: 0` is load-bearing: it holds
+ * the element hidden through `animation-delay`, which `forwards` alone does
+ * not do (forwards only applies once the animation has finished).
+ */
+.animate-reveal-in {
+  opacity: 0;
+  animation: fade-in-up 0.7s ease-out forwards;
+}
+
 /* Slide in from left (for timeline items) */
 @keyframes slide-in-left {
   from {
@@ -100,30 +107,6 @@ html {
 }
 .animate-slide-in-left {
   animation: slide-in-left 0.5s ease-out forwards;
-}
-
-/* Scale up from center */
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-.animate-scale-in {
-  animation: scale-in 0.4s ease-out forwards;
-}
-
-/* Subtle pulse for "coming soon" badges */
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-.animate-pulse-subtle {
-  animation: pulse-subtle 3s ease-in-out infinite;
 }
 
 /* Gradient shimmer for section dividers */
@@ -193,12 +176,6 @@ html {
 }
 .card-hover-lift:hover.glow-hover-amber {
   box-shadow: 0 4px 20px rgba(251, 191, 36, 0.12), 0 0 0 1px rgba(251, 191, 36, 0.08);
-}
-.card-hover-lift:hover.glow-hover-emerald {
-  box-shadow: 0 4px 20px rgba(52, 211, 153, 0.12), 0 0 0 1px rgba(52, 211, 153, 0.08);
-}
-.card-hover-lift:hover.glow-hover-purple {
-  box-shadow: 0 4px 20px rgba(167, 139, 250, 0.12), 0 0 0 1px rgba(167, 139, 250, 0.08);
 }
 
 /* ============================================
@@ -279,7 +256,8 @@ html {
    REDUCED MOTION
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal {
+  .scroll-reveal,
+  .animate-reveal-in {
     opacity: 1;
     animation: none !important;
   }
@@ -288,7 +266,6 @@ html {
     transition: none !important;
     transform: none !important;
   }
-  .animate-pulse-subtle,
   .section-divider::after,
   .animate-bar-fill {
     animation: none !important;
