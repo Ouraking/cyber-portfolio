@@ -57,8 +57,10 @@ const MILESTONES: Milestone[] = [
   {
     title: "OSCP (OffSec PEN-200)",
     description:
-      "Hands-on penetration testing certification with a 24-hour practical exam. The gold standard for offensive security.",
-    date: "2026",
+      "Hands-on penetration testing certification with a 24-hour practical exam. The gold standard for offensive security. Currently building Active Directory attack-path fundamentals in preparation.",
+    // Deliberately not year-stamped: a bare year silently goes stale, and this
+    // one is still ahead of the RHCSA milestone above.
+    date: "Up next",
     status: "planned",
   },
 ];

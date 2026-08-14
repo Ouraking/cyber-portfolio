@@ -5,39 +5,50 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface LogEntry {
   date: string;
+  /** Machine-readable value for <time datetime>, so the date is parseable. */
+  dateTime: string;
   title: string;
   tags: string[];
   summary: string;
 }
 
+/**
+ * Reverse-chronological. Keep it that way when adding entries — the timeline
+ * connector implies ordering, and an out-of-order log is the kind of detail a
+ * careful reader notices.
+ */
 const ENTRIES: LogEntry[] = [
   {
     date: "April 2026",
-    title: "OSCP Lab Progress: Active Directory Attacks",
+    dateTime: "2026-04",
+    title: "OSCP Preparation: Active Directory Attack Paths",
     tags: ["OSCP", "Active Directory", "Kerberoasting"],
     summary:
-      "Completed AD attack chains including Kerberoasting, AS-REP roasting, and Pass-the-Hash. Documented enumeration methodology using BloodHound and PowerView for lateral movement in lab environments.",
+      "Working through AD attack chains — Kerberoasting, AS-REP roasting, and Pass-the-Hash — in self-hosted lab environments. Documenting enumeration methodology with BloodHound and PowerView ahead of starting PEN-200.",
   },
   {
     date: "March 2026",
+    dateTime: "2026-03",
     title: "Zero Trust IAM Capstone Completed",
     tags: ["Zero Trust", "Microsoft Entra ID", "MFA"],
     summary:
       "Designed and validated a centralized IAM solution for 40,000 identities. Achieved 100% Conditional Access policy enforcement across all test scenarios. Published full documentation to GitHub.",
   },
   {
-    date: "May-June 2025",
-    title: "Rapid7 InsightIDR: Detection Rule Tuning",
-    tags: ["Rapid7", "SIEM", "Detection Engineering"],
-    summary:
-      "Configured custom detection rules in InsightIDR for identifying suspicious PowerShell execution and lateral movement patterns. Reduced false positive rate by tuning alert thresholds.",
-  },
-  {
     date: "December 2025",
+    dateTime: "2025-12",
     title: "NIST CSF 2.0 Deep Dive",
     tags: ["NIST", "GRC", "Compliance"],
     summary:
       "Studied the updated NIST Cybersecurity Framework 2.0 including the new Govern function. Applied framework mapping to real-world scenarios in capstone preparation.",
+  },
+  {
+    date: "May–June 2025",
+    dateTime: "2025-05",
+    title: "Rapid7 InsightIDR: Detection Rule Tuning",
+    tags: ["Rapid7", "SIEM", "Detection Engineering"],
+    summary:
+      "Configured custom detection rules in InsightIDR for identifying suspicious PowerShell execution and lateral movement patterns. Reduced false positive rate by tuning alert thresholds.",
   },
 ];
 
@@ -60,7 +71,7 @@ function EntryCard({ entry, index }: { entry: LogEntry; index: number }) {
           <div className="rounded-xl border border-border bg-card p-5 card-hover-lift glow-hover-cyan hover:border-accent-cyan/20">
             <div className="flex items-center gap-2 text-xs text-muted font-mono mb-2">
               <Calendar className="h-3 w-3" aria-hidden="true" />
-              <time>{entry.date}</time>
+              <time dateTime={entry.dateTime}>{entry.date}</time>
             </div>
 
             <h3 className="text-base font-semibold text-foreground mb-2">
