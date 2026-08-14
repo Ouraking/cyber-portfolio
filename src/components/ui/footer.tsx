@@ -1,4 +1,34 @@
-import { Shield, Github, Linkedin, Mail } from "lucide-react";
+import { Shield, Github, Mail } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+interface SocialLink {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  /** External links get target=_blank plus rel="noopener noreferrer". */
+  external?: boolean;
+}
+
+/**
+ * A LinkedIn entry belongs here — it was removed because it pointed at "#",
+ * and a dead social link on a job-seeking portfolio is worse than none. Add it
+ * back as:
+ *   { href: "https://www.linkedin.com/in/<handle>", label: "LinkedIn", icon: Linkedin, external: true }
+ * (re-importing `Linkedin` from lucide-react).
+ */
+const SOCIAL_LINKS: SocialLink[] = [
+  {
+    href: "https://github.com/Ouraking",
+    label: "GitHub",
+    icon: Github,
+    external: true,
+  },
+  {
+    href: "mailto:jm18306@gmail.com",
+    label: "Email",
+    icon: Mail,
+  },
+];
 
 export function Footer() {
   return (
@@ -14,31 +44,19 @@ export function Footer() {
 
           {/* Social icons */}
           <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/Ouraking"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border text-muted hover:text-accent-cyan hover:border-accent-cyan/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
-              aria-label="GitHub"
-            >
-              <Github className="h-4 w-4" aria-hidden="true" />
-            </a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border text-muted hover:text-accent-cyan hover:border-accent-cyan/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="h-4 w-4" aria-hidden="true" />
-            </a>
-            <a
-              href="mailto:jm18306@gmail.com"
-              className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border text-muted hover:text-accent-cyan hover:border-accent-cyan/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
-              aria-label="Email"
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-            </a>
+            {SOCIAL_LINKS.map(({ href, label, icon: Icon, external }) => (
+              <a
+                key={label}
+                href={href}
+                {...(external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-border text-muted hover:text-accent-cyan hover:border-accent-cyan/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
+                aria-label={label}
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+              </a>
+            ))}
           </div>
         </div>
 
