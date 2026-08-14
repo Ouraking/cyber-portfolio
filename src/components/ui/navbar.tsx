@@ -73,28 +73,36 @@ export function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile dropdown — always in DOM, transitions max-height + opacity */}
-      <ul
+      {/*
+        Mobile dropdown — always in DOM so max-height/opacity can transition.
+        `inert` when closed is load-bearing: without it the links stay in the
+        tab order while visually collapsed, so keyboard users tab into
+        invisible targets. It also removes the subtree from the accessibility
+        tree, which `aria-hidden` alone could not legally do here — aria-hidden
+        on a container with focusable children is an ARIA violation.
+      */}
+      <nav
         id="mobile-nav"
-        className={`md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 space-y-3 overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 overflow-hidden transition-all duration-300 ease-in-out ${
           mobileOpen ? "max-h-60 py-4 opacity-100" : "max-h-0 py-0 opacity-0"
         }`}
-        role="menu"
-        aria-hidden={!mobileOpen}
+        aria-label="Mobile navigation"
+        inert={!mobileOpen}
       >
-        {NAV_LINKS.map((link) => (
-          <li key={link.href} role="none">
-            <a
-              href={link.href}
-              role="menuitem"
-              className="block text-sm text-muted transition-colors hover:text-foreground py-1"
-              onClick={() => setMobileOpen(false)}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+        <ul className="space-y-3">
+          {NAV_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                className="block text-sm text-muted transition-colors hover:text-foreground py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan rounded"
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </header>
   );
 }
