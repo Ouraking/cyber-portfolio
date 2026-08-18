@@ -8,34 +8,37 @@
  */
 
 @theme inline {
-  --color-background: #07080a;
-  --color-foreground: #f4f5f6;
-  --color-secondary: #c4c8ce;
-  --color-muted: #8b909a;
-  --color-border: #1c1d21;
-  --color-card: #101114;
-  --color-elevated: #18191d;
+  --color-background: #020617;       /* slate-950 */
+  --color-foreground: #e2e8f0;       /* slate-200 */
+  --color-muted: #64748b;            /* slate-500 */
+  --color-border: #1e293b;           /* slate-800 */
+  --color-card: #0f172a;             /* slate-900 */
 
-  --color-accent: #3d9b8f;
-  --color-accent-emerald: #3d9b6e;
-  --color-accent-amber: #c4a35a;
+  /* Accent palette */
+  --color-accent-cyan: #22d3ee;      /* cyan-400 */
+  --color-accent-emerald: #34d399;   /* emerald-400 */
+  --color-accent-red: #f87171;       /* red-400 */
+  --color-accent-blue: #60a5fa;      /* blue-400 */
+  --color-accent-amber: #fbbf24;     /* amber-400 */
 
+  /* Typography */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-newsreader);
 }
 
+/* Base styles */
 body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Smooth scroll for anchor links */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
 }
 
+/* Custom scrollbar for the terminal component */
 .terminal-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -47,6 +50,12 @@ html {
   border-radius: 3px;
 }
 
+/* Subtle glow effect for accent elements */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+}
+
+/* Blinking cursor for terminal */
 @keyframes blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
@@ -55,6 +64,11 @@ html {
   animation: blink 1s step-end infinite;
 }
 
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+/* Fade-in animation for sections */
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -69,11 +83,39 @@ html {
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
+/*
+ * Staggered hero entrance, driven entirely by CSS so the hero needs no
+ * `mounted` state flag. The explicit `opacity: 0` is load-bearing: it holds
+ * the element hidden through `animation-delay`, which `forwards` alone does
+ * not do (forwards only applies once the animation has finished).
+ */
 .animate-reveal-in {
   opacity: 0;
   animation: fade-in-up 0.7s ease-out forwards;
 }
 
+/* Slide in from left (for timeline items) */
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.5s ease-out forwards;
+}
+
+/* Gradient shimmer for section dividers */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Toast notification */
 @keyframes toast-in {
   from {
     opacity: 0;
@@ -101,6 +143,9 @@ html {
   animation: toast-out 0.3s ease-in forwards;
 }
 
+/* ============================================
+   SCROLL REVEAL SYSTEM
+   ============================================ */
 .scroll-reveal {
   opacity: 0;
   animation-play-state: paused;
@@ -110,69 +155,107 @@ html {
   animation-play-state: running;
 }
 
+/* ============================================
+   CARD HOVER EFFECTS
+   ============================================ */
 .card-hover-lift {
-  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .card-hover-lift:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
 }
 
+.card-hover-lift:hover.glow-hover-cyan {
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.12), 0 0 0 1px rgba(34, 211, 238, 0.08);
+}
+.card-hover-lift:hover.glow-hover-red {
+  box-shadow: 0 4px 20px rgba(248, 113, 113, 0.12), 0 0 0 1px rgba(248, 113, 113, 0.08);
+}
+.card-hover-lift:hover.glow-hover-blue {
+  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.12), 0 0 0 1px rgba(96, 165, 250, 0.08);
+}
+.card-hover-lift:hover.glow-hover-amber {
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.12), 0 0 0 1px rgba(251, 191, 36, 0.08);
+}
+
+/* ============================================
+   BUTTON EFFECTS
+   ============================================ */
 .btn-press {
-  transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 .btn-press:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 .btn-press:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
-.btn-primary {
-  background: #e8e9ea;
-  color: var(--color-background);
-  border: 1px solid #e8e9ea;
-}
-.btn-primary:hover {
-  background: #f4f5f6;
-}
-.btn-primary:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-accent);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--color-secondary);
-  border: 1px solid var(--color-border);
-}
-.btn-ghost:hover {
-  color: var(--color-foreground);
-  border-color: color-mix(in srgb, var(--color-foreground) 25%, var(--color-border));
-}
-.btn-ghost:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-accent);
-}
-
+/* ============================================
+   FORM FOCUS ENHANCEMENTS
+   ============================================ */
 .input-glow {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .input-glow:focus {
-  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 16%, transparent);
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1), 0 0 15px rgba(34, 211, 238, 0.05);
 }
 
-.section-rule {
+/* ============================================
+   GRADIENT SECTION DIVIDERS
+   ============================================ */
+.section-divider {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+.section-divider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 100% at 50% 50%, rgba(34,211,238,0.04), transparent);
+  pointer-events: none;
+}
+.section-divider::after {
+  content: '';
+  width: 100%;
   height: 1px;
-  background: var(--color-border);
-  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-cyan),
+    var(--color-accent-emerald),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 8s linear infinite;
+  opacity: 0.25;
 }
 
+/* ============================================
+   PROFICIENCY BAR ANIMATION
+   ============================================ */
+@keyframes bar-fill {
+  from { width: 0; }
+}
+.animate-bar-fill {
+  animation: bar-fill 1s ease-out forwards;
+}
+
+/* ============================================
+   NAVBAR SCROLL EFFECT
+   ============================================ */
+.navbar-scrolled {
+  border-bottom-color: rgba(34, 211, 238, 0.15) !important;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   .scroll-reveal,
   .animate-reveal-in {
     opacity: 1;
@@ -183,9 +266,8 @@ html {
     transition: none !important;
     transform: none !important;
   }
-  .animate-blink,
-  .animate-toast-in,
-  .animate-toast-out {
+  .section-divider::after,
+  .animate-bar-fill {
     animation: none !important;
   }
 }
