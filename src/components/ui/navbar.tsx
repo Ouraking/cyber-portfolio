@@ -1,21 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { useState, useEffect } from "react";
+import { Shield, Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "/#work", id: "work", label: "Work" },
-  { href: "/#skills", id: "skills", label: "Skills" },
-  { href: "/#certs", id: "certs", label: "Certs" },
-  { href: "/#contact", id: "contact", label: "Contact" },
+  { href: "#skills", label: "Skills" },
+  { href: "#labs", label: "Labs" },
+  { href: "#learning", label: "Learning" },
+  { href: "#roadmap", label: "Roadmap" },
+  { href: "#contact", label: "Contact" },
 ] as const;
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -23,84 +21,45 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const sections = NAV_LINKS.map((link) =>
-      document.getElementById(link.id)
-    ).filter((el): el is HTMLElement => el !== null);
-
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target.id) {
-          setActiveId(visible[0].target.id);
-        }
-      },
-      { rootMargin: "-20% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <header
-      className={`fixed top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md transition-[border-color] duration-300 ${
-        scrolled ? "border-border" : "border-transparent"
+      className={`fixed top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md transition-[border-color,box-shadow] duration-300 ${
+        scrolled ? "navbar-scrolled" : "border-border/50"
       }`}
       role="banner"
     >
       <nav
-        className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4"
+        className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"
         aria-label="Primary navigation"
       >
-        <Link
-          href="/"
-          className="font-medium tracking-tight text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+        {/* Logo / brand */}
+        <a
+          href="#"
+          className="flex items-center gap-2 text-accent-cyan font-mono text-sm font-semibold tracking-wider"
           aria-label="Go to top of page"
         >
-          <span className="sm:hidden">{SITE.initials}</span>
-          <span className="hidden sm:inline">{SITE.shortName}</span>
-        </Link>
+          <Shield className="h-5 w-5" aria-hidden="true" />
+          <span className="hidden sm:inline">SEC://PORTFOLIO</span>
+        </a>
 
-        <ul className="hidden md:flex items-center gap-7">
+        {/* Desktop links */}
+        <ul className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <Link
+              <a
                 href={link.href}
-                className={`text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded ${
-                  activeId === link.id
-                    ? "text-foreground"
-                    : "text-muted hover:text-foreground"
-                }`}
+                className="text-sm text-muted transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
               >
                 {link.label}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>
 
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href={SITE.resumeHref}
-            className="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium btn-ghost btn-press"
-          >
-            Resume
-          </Link>
-          <Link
-            href="/#contact"
-            className="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium btn-primary btn-press"
-          >
-            Contact
-          </Link>
-        </div>
-
+        {/* Mobile toggle */}
         <button
           type="button"
-          className="md:hidden text-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+          className="md:hidden text-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan rounded"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -114,10 +73,18 @@ export function Navbar() {
         </button>
       </nav>
 
+      {/*
+        Mobile dropdown — always in DOM so max-height/opacity can transition.
+        `inert` when closed is load-bearing: without it the links stay in the
+        tab order while visually collapsed, so keyboard users tab into
+        invisible targets. It also removes the subtree from the accessibility
+        tree, which `aria-hidden` alone could not legally do here — aria-hidden
+        on a container with focusable children is an ARIA violation.
+      */}
       <nav
         id="mobile-nav"
         className={`md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileOpen ? "max-h-[28rem] py-4 opacity-100" : "max-h-0 py-0 opacity-0"
+          mobileOpen ? "max-h-60 py-4 opacity-100" : "max-h-0 py-0 opacity-0"
         }`}
         aria-label="Mobile navigation"
         inert={!mobileOpen}
@@ -125,31 +92,15 @@ export function Navbar() {
         <ul className="space-y-3">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <Link
+              <a
                 href={link.href}
-                className="block text-sm text-muted hover:text-foreground py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+                className="block text-sm text-muted transition-colors hover:text-foreground py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan rounded"
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
-              </Link>
+              </a>
             </li>
           ))}
-          <li className="flex gap-3 pt-2">
-            <Link
-              href={SITE.resumeHref}
-              className="inline-flex flex-1 items-center justify-center rounded-full px-4 py-2 text-sm font-medium btn-ghost"
-              onClick={() => setMobileOpen(false)}
-            >
-              Resume
-            </Link>
-            <Link
-              href="/#contact"
-              className="inline-flex flex-1 items-center justify-center rounded-full px-4 py-2 text-sm font-medium btn-primary"
-              onClick={() => setMobileOpen(false)}
-            >
-              Contact
-            </Link>
-          </li>
         </ul>
       </nav>
     </header>

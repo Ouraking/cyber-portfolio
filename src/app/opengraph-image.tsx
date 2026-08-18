@@ -8,16 +8,16 @@ import { ImageResponse } from "next/og";
  * bare link. Rendered with the site's own palette; no external assets are
  * fetched, which keeps it compatible with the CSP in next.config.ts.
  */
-export const alt =
-  "Koffi Jean-Marie Amedjonekou — Security engineer, identity, cloud, and vulnerability management";
+export const alt = "Koffi Jean-Marie Amedjonekou — Cybersecurity Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const BACKGROUND = "#07080a";
-const FOREGROUND = "#f4f5f6";
-const MUTED = "#8b909a";
-const ACCENT = "#3d9b8f";
-const BORDER = "#1c1d21";
+// Mirrors the tokens in globals.css.
+const BACKGROUND = "#020617";
+const FOREGROUND = "#e2e8f0";
+const MUTED = "#64748b";
+const CYAN = "#22d3ee";
+const BORDER = "#1e293b";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -31,29 +31,32 @@ export default function OpengraphImage() {
           justifyContent: "center",
           background: BACKGROUND,
           padding: "80px",
-          borderBottom: `8px solid ${ACCENT}`,
+          // Faint grid, matching the hero background.
+          backgroundImage: `linear-gradient(${BORDER} 1px, transparent 1px), linear-gradient(90deg, ${BORDER} 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
         }}
       >
         <div
           style={{
             display: "flex",
-            fontSize: 22,
-            color: ACCENT,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
+            alignItems: "center",
+            gap: "16px",
+            fontSize: 26,
+            color: CYAN,
+            fontFamily: "monospace",
           }}
         >
-          Security Portfolio
+          SEC://PORTFOLIO
         </div>
 
         <div
           style={{
             display: "flex",
-            fontSize: 64,
-            fontWeight: 600,
+            fontSize: 76,
+            fontWeight: 700,
             color: FOREGROUND,
-            marginTop: "24px",
-            lineHeight: 1.15,
+            marginTop: "28px",
+            lineHeight: 1.1,
           }}
         >
           Koffi Jean-Marie Amedjonekou
@@ -62,47 +65,35 @@ export default function OpengraphImage() {
         <div
           style={{
             display: "flex",
-            fontSize: 28,
-            color: MUTED,
+            fontSize: 40,
+            color: CYAN,
             marginTop: "20px",
-            maxWidth: 920,
+            fontFamily: "monospace",
           }}
         >
-          Security engineer — identity, cloud, and vulnerability management
+          Cybersecurity Engineer
         </div>
 
         <div
           style={{
             display: "flex",
-            gap: "16px",
-            marginTop: "36px",
-            fontSize: 22,
-            color: FOREGROUND,
+            fontSize: 26,
+            color: MUTED,
+            marginTop: "28px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              border: `1px solid ${BORDER}`,
-              borderRadius: 999,
-              padding: "8px 16px",
-              color: ACCENT,
-            }}
-          >
-            Zero Trust IAM
-          </div>
-          <div
-            style={{
-              display: "flex",
-              border: `1px solid ${BORDER}`,
-              borderRadius: 999,
-              padding: "8px 16px",
-              color: ACCENT,
-            }}
-          >
-            Detection / Rapid7
-          </div>
+          Penetration Testing · Vulnerability Management · Cloud Security · GRC
         </div>
+
+        <div
+          style={{
+            display: "flex",
+            marginTop: "44px",
+            height: "4px",
+            width: "260px",
+            background: CYAN,
+          }}
+        />
       </div>
     ),
     size
