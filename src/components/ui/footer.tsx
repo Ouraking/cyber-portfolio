@@ -1,4 +1,4 @@
-import { Shield, Github, Mail } from "lucide-react";
+import { Shield, Github, Linkedin, Mail } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface SocialLink {
@@ -10,17 +10,20 @@ interface SocialLink {
 }
 
 /**
- * A LinkedIn entry belongs here — it was removed because it pointed at "#",
- * and a dead social link on a job-seeking portfolio is worse than none. Add it
- * back as:
- *   { href: "https://www.linkedin.com/in/<handle>", label: "LinkedIn", icon: Linkedin, external: true }
- * (re-importing `Linkedin` from lucide-react).
+ * Every entry must resolve to a real destination — a dead social link on a
+ * job-seeking portfolio is worse than none.
  */
 const SOCIAL_LINKS: SocialLink[] = [
   {
     href: "https://github.com/Ouraking",
     label: "GitHub",
     icon: Github,
+    external: true,
+  },
+  {
+    href: "https://www.linkedin.com/in/koffi-amedjonekou/",
+    label: "LinkedIn",
+    icon: Linkedin,
     external: true,
   },
   {

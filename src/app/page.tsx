@@ -15,11 +15,6 @@ import { ContactSection } from "@/components/sections/contact";
  * wrapper, which would become the containing block for any `position: fixed`
  * descendant (see the toast in contact.tsx).
  * Section dividers add subtle gradient lines between content areas.
- *
- * LinkedIn is deliberately absent from the hero socials for the same reason
- * it is absent from the footer: a dead "#" social link on a job-seeking
- * portfolio is worse than none. Add it with
- *   { icon: "linkedin", href: "https://www.linkedin.com/in/<handle>", label: "LinkedIn", external: true }
  */
 export default function Home() {
   return (
@@ -35,6 +30,12 @@ export default function Home() {
             icon: "github",
             href: "https://github.com/Ouraking",
             label: "GitHub",
+            external: true,
+          },
+          {
+            icon: "linkedin",
+            href: "https://www.linkedin.com/in/koffi-amedjonekou/",
+            label: "LinkedIn",
             external: true,
           },
           { icon: "mail", href: "mailto:jm18306@gmail.com", label: "Email" },
