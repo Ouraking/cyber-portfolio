@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 /*
+ * shadcn/ui: make `dark:` utilities key off the `.dark` class that
+ * layout.tsx puts on <html>, rather than prefers-color-scheme.
+ */
+@custom-variant dark (&:is(.dark *));
+
+/*
  * SECURITY NOTE: All styling is handled via Tailwind utility classes and CSS custom properties.
  * No inline styles from user input are used, eliminating CSS injection vectors.
  * The dark theme is enforced at the HTML level — no JS-based theme switching
@@ -13,6 +19,26 @@
   --color-muted: #64748b;            /* slate-500 */
   --color-border: #1e293b;           /* slate-800 */
   --color-card: #0f172a;             /* slate-900 */
+
+  /*
+   * shadcn/ui semantic tokens, mapped onto the palette above so shadcn
+   * components (button, HeroBlock, …) inherit the site's colours. Purely
+   * additive — none of the tokens above are redefined, so existing
+   * `text-muted`, `bg-card`, `border-border` usage is unchanged.
+   */
+  --color-card-foreground: #e2e8f0;      /* slate-200 */
+  --color-popover: #0f172a;              /* slate-900 */
+  --color-popover-foreground: #e2e8f0;   /* slate-200 */
+  --color-primary: #22d3ee;              /* cyan-400 (= accent-cyan) */
+  --color-primary-foreground: #020617;   /* slate-950 */
+  --color-secondary: #1e293b;            /* slate-800 */
+  --color-secondary-foreground: #e2e8f0; /* slate-200 */
+  --color-muted-foreground: #94a3b8;     /* slate-400 */
+  --color-accent: #1e293b;               /* slate-800 */
+  --color-accent-foreground: #e2e8f0;    /* slate-200 */
+  --color-destructive: #f87171;          /* red-400 (= accent-red) */
+  --color-input: #1e293b;                /* slate-800 */
+  --color-ring: #22d3ee;                 /* cyan-400 */
 
   /* Accent palette */
   --color-accent-cyan: #22d3ee;      /* cyan-400 */
