@@ -12,6 +12,8 @@ Single-page app, statically prerendered, no backend and no tracking scripts.
 | Language | TypeScript |
 | Styling | Tailwind CSS v4 (`@theme` tokens in `globals.css`) |
 | Icons | lucide-react |
+| UI primitives | shadcn/ui (`components.json`; components live in `src/components/ui`) |
+| Motion | framer-motion (hero entrance animation; honours `prefers-reduced-motion`) |
 | Fonts | Geist Sans / Geist Mono via `next/font` (self-hosted at build time) |
 | Contact form | Formsubmit.co (no server needed) |
 | Hosting | Vercel |
@@ -43,11 +45,16 @@ src/
 │   └── globals.css           # design tokens, animations, reduced-motion rules
 ├── components/
 │   ├── sections/             # one file per page section
-│   └── ui/                   # navbar, footer, ScrollReveal
+│   └── ui/                   # navbar, footer, ScrollReveal, HeroBlock, shadcn primitives (button)
+└── lib/
+    └── utils.ts              # cn() helper used by shadcn components
+components.json               # shadcn CLI config — aliases, Tailwind v4 css path
 next.config.ts                # security response headers
 ```
 
 Each section in `src/components/sections/` is self-contained and owns its own scroll-reveal animation. `page.tsx` only decides the order.
+
+The hero is `HeroBlock` from `src/components/ui/hero-block-shadcnui.tsx`, configured with props from `page.tsx`. Add further shadcn components with `npx shadcn@latest add <name>`; the semantic tokens they rely on (`primary`, `secondary`, `muted-foreground`, `ring`, …) are mapped onto the site palette in `globals.css`.
 
 > **Note:** sections own their `ScrollReveal` wrapper rather than being wrapped from `page.tsx`. `ScrollReveal` leaves a non-`none` `transform` on its wrapper, which makes it the containing block for any `position: fixed` descendant — wrapping a whole section breaks fixed-position children such as the contact toast.
 
