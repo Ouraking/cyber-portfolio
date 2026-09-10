@@ -39,7 +39,7 @@ function ProjectCard({
         <div>
           {featured && (
             <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
-              Capstone
+              Featured
             </p>
           )}
           <h3 className="text-lg font-medium text-foreground">
