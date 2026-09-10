@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The site is static and has no test suite; a green lint, typecheck, and build
+# is the whole contract. Anything that breaks the production build fails here
+# before it reaches a Vercel deploy.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` installs strictly from the lockfile, so a lockfile that has
+      # drifted from package.json fails here rather than silently resolving.
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - run: npm run build
