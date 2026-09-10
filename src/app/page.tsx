@@ -1,59 +1,32 @@
-import { HeroBlock } from "@/components/ui/hero-block-shadcnui";
-import { PhilosophySection } from "@/components/sections/philosophy";
-import { StatsSection } from "@/components/sections/stats";
-import { SkillMatrixSection } from "@/components/sections/skill-matrix";
-import { LabWriteupsSection } from "@/components/sections/lab-writeups";
-import { LearningLogSection } from "@/components/sections/learning-log";
-import { RoadmapSection } from "@/components/sections/roadmap";
+import { Hero } from "@/components/sections/hero";
+import { ProofStrip } from "@/components/sections/proof-strip";
+import { WorkSection } from "@/components/sections/work";
+import { SkillsSection } from "@/components/sections/skills";
+import { CertificationsSection } from "@/components/sections/certifications";
+import { EducationSection } from "@/components/sections/education";
+import { NowSection } from "@/components/sections/now";
 import { ContactSection } from "@/components/sections/contact";
 
 /**
- * Home page — single-page portfolio layout.
- * Each section is a self-contained component for maintainability.
- * Sections own their own ScrollReveal wrappers so that reveal animations never
- * wrap an entire section: ScrollReveal leaves a non-none `transform` on its
- * wrapper, which would become the containing block for any `position: fixed`
- * descendant (see the toast in contact.tsx).
- * Section dividers add subtle gradient lines between content areas.
+ * Home page. Ordered so a reader who leaves after one screen still knows who
+ * this is and what they do, and one who leaves after three has seen the
+ * strongest project.
+ *
+ * Sections own their own ScrollReveal wrappers rather than being wrapped from
+ * here: ScrollReveal leaves a non-none `transform` on its wrapper, which would
+ * become the containing block for any `position: fixed` descendant — see the
+ * toast in contact.tsx.
  */
 export default function Home() {
   return (
     <>
-      <HeroBlock
-        title="Koffi Jean-Marie Amedjonekou"
-        subtitle="Cybersecurity Engineer"
-        description="Dedicated cybersecurity professional with hands-on expertise across penetration testing, vulnerability management, cloud security, and governance frameworks. Committed to the principle of ‘secure-by-default’ in every technical decision."
-        primaryCta={{ label: "Get in Touch", href: "#contact" }}
-        secondaryCta={{ label: "View My Work", href: "#labs" }}
-        socials={[
-          {
-            icon: "github",
-            href: "https://github.com/Ouraking",
-            label: "GitHub",
-            external: true,
-          },
-          {
-            icon: "linkedin",
-            href: "https://www.linkedin.com/in/koffi-amedjonekou/",
-            label: "LinkedIn",
-            external: true,
-          },
-          { icon: "mail", href: "mailto:jm18306@gmail.com", label: "Email" },
-        ]}
-      />
-      <div className="section-divider" aria-hidden="true" />
-      <PhilosophySection />
-      <div className="section-divider" aria-hidden="true" />
-      <StatsSection />
-      <div className="section-divider" aria-hidden="true" />
-      <SkillMatrixSection />
-      <div className="section-divider" aria-hidden="true" />
-      <LabWriteupsSection />
-      <div className="section-divider" aria-hidden="true" />
-      <LearningLogSection />
-      <div className="section-divider" aria-hidden="true" />
-      <RoadmapSection />
-      <div className="section-divider" aria-hidden="true" />
+      <Hero />
+      <ProofStrip />
+      <WorkSection />
+      <SkillsSection />
+      <CertificationsSection />
+      <EducationSection />
+      <NowSection />
       <ContactSection />
     </>
   );
