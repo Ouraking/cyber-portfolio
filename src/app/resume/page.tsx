@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { PrintButton } from "@/components/ui/print-button";
-import { SITE } from "@/lib/site";
+import { SITE, displayUrl } from "@/lib/site";
 import { PROJECTS } from "@/data/projects";
 import { SKILL_DOMAINS } from "@/data/skills";
 import {
@@ -72,7 +72,7 @@ export default function ResumePage() {
               rel="noopener noreferrer"
               className="hover:text-accent"
             >
-              github.com/Ouraking
+              {displayUrl(SITE.github)}
             </a>
             {" · "}
             <a
