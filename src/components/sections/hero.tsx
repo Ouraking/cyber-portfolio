@@ -10,18 +10,19 @@ import { SITE } from "@/lib/site";
  * A Server Component. The staggered entrance is pure CSS (`.animate-reveal-in`
  * plus an inline animationDelay), so the hero ships no JavaScript at all —
  * which is why framer-motion was dropped in this rebuild.
- *
- * `100svh` rather than `100vh`: on mobile the dynamic browser chrome makes
- * `vh` taller than the visible viewport, pushing the CTAs below the fold on
- * first paint.
  */
 export function Hero() {
   return (
     <section
-      className="px-6 pb-16 pt-28 sm:pt-32"
+      className="px-6 pb-20 pt-32 sm:pt-36"
       aria-labelledby="hero-heading"
     >
-      <div className="mx-auto grid max-w-6xl items-center gap-12 lg:min-h-[calc(100svh-9rem)] lg:grid-cols-[1fr_auto] lg:gap-16">
+      {/*
+        Deliberately not a 100vh hero. Forcing full-viewport height centred the
+        content and left a dead band under it, and pushed the proof strip below
+        the fold — the two numbers a recruiter most wants early.
+      */}
+      <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-16">
         <div>
           <p
             className="animate-reveal-in font-mono text-[11px] uppercase tracking-[0.14em] text-accent"
