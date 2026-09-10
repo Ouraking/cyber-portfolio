@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import { Navbar } from "@/components/ui/navbar";
 import { Footer } from "@/components/ui/footer";
+import { SITE, SITE_URL } from "@/lib/site";
+import { buildJsonLd } from "@/lib/jsonld";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,45 +18,30 @@ const geistMono = Geist_Mono({
 });
 
 /**
- * Absolute base for og:image and other absolute URLs. Vercel exposes the
- * production domain at build time, so this resolves correctly on deploys
- * without hardcoding a URL. Set NEXT_PUBLIC_SITE_URL to override once a
- * custom domain is attached.
- */
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
-
-const NAME = "Koffi Jean-Marie Amedjonekou";
-const ROLE = "Cybersecurity Engineer";
-const DESCRIPTION =
-  "Cybersecurity engineer working across penetration testing, vulnerability management, cloud security, and GRC. CompTIA, Rapid7, and Microsoft certified. Open to full-time security engineering and SOC analyst roles.";
-
-/**
- * SECURITY NOTE: Metadata is statically defined — not derived from user input or
- * query parameters. This prevents meta-tag injection and open-redirect via og:url.
- * Response security headers (CSP, HSTS, and friends) are set in next.config.ts.
+ * SECURITY NOTE: metadata is built from the static config in lib/site.ts —
+ * never from user input or query parameters. That prevents meta-tag injection
+ * and open-redirect via og:url. Response security headers (CSP, HSTS, and
+ * friends) are set in next.config.ts.
  */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   // The name leads so the page is findable by it; the role gives search and
   // social results something to match on.
-  title: `${NAME} | ${ROLE}`,
-  description: DESCRIPTION,
-  authors: [{ name: NAME }],
-  creator: NAME,
+  title: `${SITE.name} | ${SITE.role}`,
+  description: SITE.description,
+  authors: [{ name: SITE.name }],
+  creator: SITE.name,
   keywords: [
     "cybersecurity engineer",
-    "penetration testing",
+    "security engineer",
+    "identity and access management",
     "vulnerability management",
     "SOC analyst",
     "cloud security",
     "GRC",
     "Rapid7 InsightVM",
     "zero trust",
-    NAME,
+    SITE.name,
   ],
   robots: { index: true, follow: true },
   alternates: { canonical: "/" },
@@ -61,16 +49,16 @@ export const metadata: Metadata = {
   // with no title, description, or preview card.
   openGraph: {
     type: "profile",
-    siteName: `${NAME} — Security Portfolio`,
-    title: `${NAME} | ${ROLE}`,
-    description: DESCRIPTION,
+    siteName: `${SITE.name} — Security Portfolio`,
+    title: `${SITE.name} | ${SITE.role}`,
+    description: SITE.description,
     url: "/",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${NAME} | ${ROLE}`,
-    description: DESCRIPTION,
+    title: `${SITE.name} | ${SITE.role}`,
+    description: SITE.description,
   },
 };
 
@@ -79,22 +67,46 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  /*
+   * The only dangerouslySetInnerHTML in the codebase, and it is safe by
+   * construction: buildJsonLd() returns a static object assembled from the
+   * data layer, with no user input anywhere in it. Escaping `<` to its
+   * unicode form is belt-and-braces: it stops any future string that happened
+   * to contain a closing script tag from breaking out of this one.
+   *
+   * The CSP in next.config.ts already allows 'unsafe-inline' for script-src
+   * (the App Router inlines the RSC flight payload), so this needs no header
+   * change. It is not executable script; type="application/ld+json" is data.
+   */
+  const jsonLd = JSON.stringify(buildJsonLd()).replace(/</g, "\\u003c");
+
   return (
-    // lang attribute for accessibility; dark class forces dark mode
+    // lang for assistive technology; the dark class forces the single theme.
     <html lang="en" className="dark">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground-2 antialiased`}
       >
-        {/* Skip-to-content link for keyboard/screen reader users (WCAG 2.4.1) */}
+        {/* Skip-to-content link for keyboard and screen reader users (WCAG 2.4.1) */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:bg-accent-cyan focus:px-4 focus:py-2 focus:text-background focus:outline-none"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-foreground focus:outline-none"
         >
           Skip to main content
         </a>
-        <Navbar />
+        {/* Chrome is hidden in print so /resume prints as a clean document. */}
+        <div className="print:hidden">
+          <Navbar />
+        </div>
         <main id="main-content">{children}</main>
-        <Footer />
+        <div className="print:hidden">
+          <Footer />
+        </div>
       </body>
     </html>
   );
