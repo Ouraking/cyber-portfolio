@@ -38,6 +38,8 @@ export async function generateMetadata({
       title: `${project.title} — ${SITE.name}`,
       description: project.outcome,
       url: `/work/${project.slug}`,
+      // The card itself comes from opengraph-image.tsx in this segment, which
+      // re-exports the root generator. See the comment in that file.
     },
   };
 }

@@ -89,3 +89,8 @@ export const SOCIAL_LINKS: SocialLink[] = [
   { icon: "linkedin", href: SITE.linkedin, label: "LinkedIn", external: true },
   { icon: "mail", href: `mailto:${SITE.email}`, label: "Email" },
 ];
+
+/** "github.com/Ouraking" from the full URL — for display where a bare link is ugly. */
+export function displayUrl(url: string): string {
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
