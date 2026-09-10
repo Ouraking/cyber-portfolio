@@ -1,27 +1,44 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Send, Check, Mail, User, MessageSquare, AlertCircle, Loader2, MapPin, CircleDot } from "lucide-react";
+import {
+  AlertCircle,
+  Check,
+  CircleDot,
+  Loader2,
+  Mail,
+  MapPin,
+  Send,
+} from "lucide-react";
+
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { Button } from "@/components/ui/button";
+import { SocialLinks } from "@/components/ui/social-links";
+import { SITE } from "@/lib/site";
 
 /**
- * Contact form — sends messages via Formsubmit.co to jm18306@gmail.com.
+ * Contact form — sends messages via Formsubmit.co, so the site needs no
+ * backend.
+ *
  * SECURITY NOTES:
- * - All inputs use controlled React state (not dangerouslySetInnerHTML).
- * - Form data is sent to Formsubmit.co via fetch POST (no page redirect).
- * - No user input is rendered back as raw HTML — React auto-escapes JSX.
- * - Formsubmit.co handles spam filtering, rate limiting, and CAPTCHA.
- * - _captcha is disabled for seamless UX; Formsubmit still applies bot detection.
+ * - All inputs are controlled React state; dangerouslySetInnerHTML is not used
+ *   here, so user text is never rendered as raw HTML.
+ * - Posted with fetch rather than a native submit, so there is no redirect.
+ * - The endpoint is built from SITE.email, a compile-time constant, never from
+ *   a query parameter.
+ * - formsubmit.co is the only origin allowed by connect-src / form-action in
+ *   next.config.ts.
+ * - _captcha is disabled for UX; Formsubmit still applies bot detection.
  *
  * The form keeps `noValidate` so validation messaging is styled and announced
  * consistently across browsers, which means the `required` attributes are
- * advisory only — `validate()` below is the actual gate.
+ * advisory only — validate() below is the actual gate.
  */
 
 type FieldName = "name" | "email" | "message";
 type FieldErrors = Partial<Record<FieldName, string>>;
 
-/** Deliberately permissive: catches empty/typo'd input without rejecting valid exotic addresses. */
+/** Deliberately permissive: catches empty or typo'd input without rejecting valid exotic addresses. */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validate(values: Record<FieldName, string>): FieldErrors {
@@ -120,21 +137,24 @@ export function ContactSection() {
     setSending(true);
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/jm18306@gmail.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          name: formState.name.trim(),
-          email: formState.email.trim(),
-          message: formState.message.trim(),
-          _subject: `Portfolio Contact — ${formState.name.trim()}`,
-          _captcha: "false",
-          _template: "table",
-        }),
-      });
+      const response = await fetch(
+        `https://formsubmit.co/ajax/${SITE.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: formState.name.trim(),
+            email: formState.email.trim(),
+            message: formState.message.trim(),
+            _subject: `Portfolio contact — ${formState.name.trim()}`,
+            _captcha: "false",
+            _template: "table",
+          }),
+        }
+      );
 
       if (response.ok) {
         showToast(false);
@@ -150,100 +170,84 @@ export function ContactSection() {
   };
 
   const fieldClasses = (field: FieldName) =>
-    `w-full rounded-lg border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 input-glow focus:outline-none ${
-      errors[field] ? "border-red-500/50" : "border-border"
+    `input-glow w-full rounded-lg border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/60 focus:outline-none ${
+      errors[field] ? "border-danger/50" : "border-border"
     }`;
+
+  const errorClasses =
+    "mt-1.5 flex items-center gap-1.5 text-xs text-danger";
+
+  const details = [
+    { icon: Mail, label: "Email", value: SITE.email },
+    { icon: MapPin, label: "Location", value: SITE.location },
+    { icon: CircleDot, label: "Availability", value: SITE.availability },
+  ];
 
   return (
     <section
       id="contact"
-      className="px-6 py-24 bg-card/50"
+      className="border-t border-border"
       aria-labelledby="contact-heading"
     >
       {/*
         NOTE: the toast at the bottom of this file is intentionally rendered
-        outside this ScrollReveal. ScrollReveal's animation leaves a non-none
-        `transform` on its wrapper, which makes it the containing block for any
-        `position: fixed` descendant — the toast would anchor to the section
-        instead of the viewport.
+        outside the ScrollReveal below. ScrollReveal's animation leaves a
+        non-none `transform` on its wrapper, which makes that wrapper the
+        containing block for any `position: fixed` descendant — the toast would
+        anchor to the section instead of the viewport.
       */}
       <ScrollReveal>
-        <div className="mx-auto max-w-6xl">
-          {/* Section header */}
-          <div className="text-center mb-12">
+        <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
+          <div className="mb-10 max-w-2xl sm:mb-12">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+              Contact
+            </p>
             <h2
               id="contact-heading"
-              className="text-3xl font-bold tracking-tight text-foreground"
+              className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
             >
-              Get in Touch
+              Get in touch
             </h2>
-            <p className="mt-3 text-muted max-w-lg mx-auto">
-              Committed to contributing meaningfully to cybersecurity teams where
-              technical expertise and a security-first mindset drive organizational
-              resilience. Open to opportunities in penetration testing, vulnerability
-              management, threat analysis, and security research.
+            <p className="mt-3 leading-relaxed text-muted">
+              Whether you have a role, a question, or just want to talk
+              security, I&apos;d like to hear from you.
             </p>
           </div>
 
-          <div className="mx-auto max-w-5xl grid gap-10 lg:grid-cols-2 items-start">
-            {/* Left column: info cards */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-1">Let&apos;s Connect</h3>
-                <p className="text-sm text-muted leading-relaxed">
-                  Whether you have an opportunity, a question, or just want to talk security &mdash; I&apos;d love to hear from you.
-                </p>
-              </div>
+          <div className="grid items-start gap-10 lg:grid-cols-2">
+            <div>
+              <dl className="space-y-4">
+                {details.map(({ icon: Icon, label, value }) => (
+                  <div
+                    key={label}
+                    className="flex items-start gap-4 rounded-lg border border-border bg-card p-4"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-2">
+                      <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <dt className="text-sm font-medium text-foreground">
+                        {label}
+                      </dt>
+                      <dd className="text-sm text-muted">{value}</dd>
+                    </div>
+                  </div>
+                ))}
+              </dl>
 
-              <div className="space-y-4">
-                {/* Email card */}
-                <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-cyan/10">
-                    <Mail className="h-5 w-5 text-accent-cyan" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Email</p>
-                    <p className="text-sm text-muted">jm18306@gmail.com</p>
-                  </div>
-                </div>
-
-                {/* Location card */}
-                <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-blue/10">
-                    <MapPin className="h-5 w-5 text-accent-blue" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Location</p>
-                    <p className="text-sm text-muted">United States &mdash; Open to Remote</p>
-                  </div>
-                </div>
-
-                {/* Availability card */}
-                <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-emerald/10">
-                    <CircleDot className="h-5 w-5 text-accent-emerald" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Availability</p>
-                    <p className="text-sm text-muted">Open to full-time security roles</p>
-                  </div>
-                </div>
-              </div>
+              <SocialLinks className="mt-6" />
             </div>
 
-            {/* Right column: Form */}
             <form
               onSubmit={handleSubmit}
-              className="rounded-xl border border-border bg-card p-6 space-y-5"
+              className="space-y-5 rounded-xl border border-border bg-card p-6"
               noValidate
             >
-              {/* Name */}
               <div>
                 <label
                   htmlFor="contact-name"
-                  className="flex items-center gap-1.5 text-sm font-medium text-foreground mb-1.5"
+                  className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  <User className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
                   Name
                 </label>
                 <input
@@ -260,23 +264,18 @@ export function ContactSection() {
                   placeholder="Your name"
                 />
                 {errors.name && (
-                  <p
-                    id="contact-name-error"
-                    className="mt-1.5 flex items-center gap-1.5 text-xs text-red-400"
-                  >
+                  <p id="contact-name-error" className={errorClasses}>
                     <AlertCircle className="h-3 w-3 shrink-0" aria-hidden="true" />
                     {errors.name}
                   </p>
                 )}
               </div>
 
-              {/* Email */}
               <div>
                 <label
                   htmlFor="contact-email"
-                  className="flex items-center gap-1.5 text-sm font-medium text-foreground mb-1.5"
+                  className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  <Mail className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
                   Email
                 </label>
                 <input
@@ -288,86 +287,75 @@ export function ContactSection() {
                   value={formState.email}
                   onChange={(e) => updateField("email", e.target.value)}
                   aria-invalid={Boolean(errors.email)}
-                  aria-describedby={errors.email ? "contact-email-error" : undefined}
+                  aria-describedby={
+                    errors.email ? "contact-email-error" : undefined
+                  }
                   className={fieldClasses("email")}
                   placeholder="you@example.com"
                 />
                 {errors.email && (
-                  <p
-                    id="contact-email-error"
-                    className="mt-1.5 flex items-center gap-1.5 text-xs text-red-400"
-                  >
+                  <p id="contact-email-error" className={errorClasses}>
                     <AlertCircle className="h-3 w-3 shrink-0" aria-hidden="true" />
                     {errors.email}
                   </p>
                 )}
               </div>
 
-              {/* Message */}
               <div>
                 <label
                   htmlFor="contact-message"
-                  className="flex items-center gap-1.5 text-sm font-medium text-foreground mb-1.5"
+                  className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  <MessageSquare className="h-3.5 w-3.5 text-accent-cyan" aria-hidden="true" />
                   Message
                 </label>
                 <textarea
                   id="contact-message"
                   ref={messageRef}
                   required
-                  rows={4}
+                  rows={5}
                   value={formState.message}
                   onChange={(e) => updateField("message", e.target.value)}
                   aria-invalid={Boolean(errors.message)}
-                  aria-describedby={errors.message ? "contact-message-error" : undefined}
+                  aria-describedby={
+                    errors.message ? "contact-message-error" : undefined
+                  }
                   className={`${fieldClasses("message")} resize-none`}
-                  placeholder="Describe the opportunity or project..."
+                  placeholder="Describe the role or the question..."
                 />
                 {errors.message && (
-                  <p
-                    id="contact-message-error"
-                    className="mt-1.5 flex items-center gap-1.5 text-xs text-red-400"
-                  >
+                  <p id="contact-message-error" className={errorClasses}>
                     <AlertCircle className="h-3 w-3 shrink-0" aria-hidden="true" />
                     {errors.message}
                   </p>
                 )}
               </div>
 
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={sending}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 px-5 py-2.5 text-sm font-medium text-accent-cyan btn-press hover:bg-accent-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-accent-cyan/10"
-              >
+              <Button type="submit" disabled={sending} className="w-full">
                 {sending ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                    Sending…
+                    <Loader2 className="animate-spin" aria-hidden="true" />
+                    Sending...
                   </>
                 ) : (
                   <>
-                    <Send className="h-4 w-4" aria-hidden="true" />
-                    Send Message
+                    <Send aria-hidden="true" />
+                    Send message
                   </>
                 )}
-              </button>
+              </Button>
             </form>
-          </div>  {/* end grid */}
+          </div>
         </div>
       </ScrollReveal>
 
-      {/* Toast notification — outside ScrollReveal so `fixed` resolves against the viewport */}
+      {/* Toast — outside ScrollReveal so `fixed` resolves against the viewport. */}
       {toastVisible && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border ${
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border bg-card px-4 py-3 text-sm font-medium shadow-lg ${
             toastError
-              ? "border-red-500/30 text-red-400"
-              : "border-accent-emerald/30 text-accent-emerald"
-          } bg-card px-4 py-3 text-sm font-medium shadow-lg ${
-            toastExiting ? "animate-toast-out" : "animate-toast-in"
-          }`}
+              ? "border-danger/30 text-danger"
+              : "border-success/30 text-success"
+          } ${toastExiting ? "animate-toast-out" : "animate-toast-in"}`}
           role="status"
           aria-live="polite"
         >
@@ -379,7 +367,7 @@ export function ContactSection() {
           ) : (
             <>
               <Check className="h-4 w-4" aria-hidden="true" />
-              Message sent successfully
+              Message sent
             </>
           )}
         </div>

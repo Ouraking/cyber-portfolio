@@ -7,98 +7,118 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * SECURITY NOTE: All styling is handled via Tailwind utility classes and CSS custom properties.
- * No inline styles from user input are used, eliminating CSS injection vectors.
- * The dark theme is enforced at the HTML level — no JS-based theme switching
- * that could be manipulated via DOM tampering.
+ * SECURITY NOTE: all styling is Tailwind utilities and CSS custom properties.
+ * No inline styles are built from user input, so there is no CSS injection
+ * vector. The dark theme is enforced at the HTML level — there is no JS theme
+ * switcher that could be manipulated via DOM tampering.
+ *
+ * ── Token architecture ──────────────────────────────────────────────────
+ * Raw values live on :root; @theme inline maps them to Tailwind's colour
+ * namespace as var() references rather than literal hex. That indirection is
+ * load-bearing: because `bg-card` compiles to `var(--surface)` and not to
+ * `#0f172a`, the print block at the bottom of this file can repaint the whole
+ * site by redeclaring ~10 variables. With literal hex in @theme, /resume would
+ * need a per-class override for every colour on the page.
+ *
+ * ── Two naming caveats ──────────────────────────────────────────────────
+ * 1. `muted` is a TEXT colour here (slate-400), not shadcn's muted *surface*.
+ *    Use `text-muted`; never `bg-muted`. Surfaces are `surface` / `surface-2`.
+ * 2. `accent` is the brand colour, not shadcn's neutral hover surface. Use it
+ *    for emphasis; the hover surface is `bg-surface-2`.
+ * The shadcn semantic tokens below are mapped to respect both.
  */
 
-@theme inline {
-  --color-background: #020617;       /* slate-950 */
-  --color-foreground: #e2e8f0;       /* slate-200 */
-  --color-muted: #64748b;            /* slate-500 */
-  --color-border: #1e293b;           /* slate-800 */
-  --color-card: #0f172a;             /* slate-900 */
+:root {
+  /* Surfaces — cool near-black through two elevation steps */
+  --background: #0a0f1a;
+  --surface: #0f172a;
+  --surface-2: #172033;
+
+  /* Lines */
+  --border: #1e293b;
+  --border-strong: #334155;
+
+  /* Text, in descending emphasis. All three clear 7:1 on --background. */
+  --foreground: #f1f5f9;
+  --foreground-2: #cbd5e1;
+  --muted: #94a3b8;
+
+  /* The one accent. Everything else is neutral. */
+  --accent: #22d3ee;
+  --accent-hover: #67e8f9;
+  --accent-foreground: #0a0f1a;
 
   /*
-   * shadcn/ui semantic tokens, mapped onto the palette above so shadcn
-   * components (button, HeroBlock, …) inherit the site's colours. Purely
-   * additive — none of the tokens above are redefined, so existing
-   * `text-muted`, `bg-card`, `border-border` usage is unchanged.
+   * Semantic only — these two never carry brand meaning. Success marks an
+   * earned credential and a sent message; danger marks a form error. Using
+   * them decoratively is what made the previous palette read as a template.
    */
-  --color-card-foreground: #e2e8f0;      /* slate-200 */
-  --color-popover: #0f172a;              /* slate-900 */
-  --color-popover-foreground: #e2e8f0;   /* slate-200 */
-  --color-primary: #22d3ee;              /* cyan-400 (= accent-cyan) */
-  --color-primary-foreground: #020617;   /* slate-950 */
-  --color-secondary: #1e293b;            /* slate-800 */
-  --color-secondary-foreground: #e2e8f0; /* slate-200 */
-  --color-muted-foreground: #94a3b8;     /* slate-400 */
-  --color-accent: #1e293b;               /* slate-800 */
-  --color-accent-foreground: #e2e8f0;    /* slate-200 */
-  --color-destructive: #f87171;          /* red-400 (= accent-red) */
-  --color-input: #1e293b;                /* slate-800 */
-  --color-ring: #22d3ee;                 /* cyan-400 */
+  --success: #34d399;
+  --danger: #f87171;
+}
 
-  /* Accent palette */
-  --color-accent-cyan: #22d3ee;      /* cyan-400 */
-  --color-accent-emerald: #34d399;   /* emerald-400 */
-  --color-accent-red: #f87171;       /* red-400 */
-  --color-accent-blue: #60a5fa;      /* blue-400 */
-  --color-accent-amber: #fbbf24;     /* amber-400 */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
 
-  /* Typography */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-2: var(--foreground-2);
+  --color-muted: var(--muted);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  /* shadcn/ui semantic tokens, mapped onto the palette above. */
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface-2);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted);
+  --color-destructive: var(--danger);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-/* Base styles */
+/* ============================================
+   BASE
+   ============================================ */
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--background);
+  color: var(--foreground-2);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Smooth scroll for anchor links */
 html {
   scroll-behavior: smooth;
-}
-
-/* Custom scrollbar for the terminal component */
-.terminal-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-.terminal-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.terminal-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 3px;
-}
-
-/* Subtle glow effect for accent elements */
-.glow-cyan {
-  box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
-}
-
-/* Blinking cursor for terminal */
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-.animate-blink {
-  animation: blink 1s step-end infinite;
+  /*
+   * The navbar is fixed at 5rem. Without this, an in-page anchor scrolls the
+   * heading to y=0 and the navbar covers it.
+   */
+  scroll-padding-top: 5rem;
 }
 
 /* ============================================
-   ANIMATION KEYFRAMES
+   MOTION
    ============================================ */
-
-/* Fade-in animation for sections */
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -110,42 +130,21 @@ html {
 }
 
 /*
- * Staggered hero entrance, driven entirely by CSS so the hero needs no
- * `mounted` state flag. The explicit `opacity: 0` is load-bearing: it holds
- * the element hidden through `animation-delay`, which `forwards` alone does
- * not do (forwards only applies once the animation has finished).
+ * Staggered entrance driven entirely by CSS, so the hero needs no `mounted`
+ * state flag and stays a Server Component. The explicit `opacity: 0` is
+ * load-bearing: it holds the element hidden through `animation-delay`, which
+ * `forwards` alone does not do — forwards only applies once the animation has
+ * finished.
  */
 .animate-reveal-in {
   opacity: 0;
   animation: fade-in-up 0.7s ease-out forwards;
 }
 
-/* Slide in from left (for timeline items) */
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-.animate-slide-in-left {
-  animation: slide-in-left 0.5s ease-out forwards;
-}
-
-/* Gradient shimmer for section dividers */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* Toast notification */
 @keyframes toast-in {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.95);
+    transform: translateY(10px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -159,7 +158,7 @@ html {
   }
   to {
     opacity: 0;
-    transform: translateY(-10px) scale(0.95);
+    transform: translateY(-10px) scale(0.97);
   }
 }
 .animate-toast-in {
@@ -170,7 +169,11 @@ html {
 }
 
 /* ============================================
-   SCROLL REVEAL SYSTEM
+   SCROLL REVEAL
+   Paired with components/ui/scroll-reveal.tsx, which adds `.is-visible`.
+   NOTE: the animation leaves a non-none `transform` on the wrapper, making it
+   the containing block for any `position: fixed` descendant. Never wrap a
+   subtree containing a fixed element (see the toast in contact.tsx).
    ============================================ */
 .scroll-reveal {
   opacity: 0;
@@ -182,118 +185,88 @@ html {
 }
 
 /* ============================================
-   CARD HOVER EFFECTS
+   CARD HOVER
+   A 2px lift and a brighter border. No glow, no coloured shadow.
    ============================================ */
 .card-hover-lift {
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
 .card-hover-lift:hover {
   transform: translateY(-2px);
-}
-
-.card-hover-lift:hover.glow-hover-cyan {
-  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.12), 0 0 0 1px rgba(34, 211, 238, 0.08);
-}
-.card-hover-lift:hover.glow-hover-red {
-  box-shadow: 0 4px 20px rgba(248, 113, 113, 0.12), 0 0 0 1px rgba(248, 113, 113, 0.08);
-}
-.card-hover-lift:hover.glow-hover-blue {
-  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.12), 0 0 0 1px rgba(96, 165, 250, 0.08);
-}
-.card-hover-lift:hover.glow-hover-amber {
-  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.12), 0 0 0 1px rgba(251, 191, 36, 0.08);
+  border-color: var(--border-strong);
 }
 
 /* ============================================
-   BUTTON EFFECTS
-   ============================================ */
-.btn-press {
-  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-.btn-press:hover {
-  transform: scale(1.03);
-}
-.btn-press:active {
-  transform: scale(0.97);
-}
-
-/* ============================================
-   FORM FOCUS ENHANCEMENTS
+   FORM FOCUS
    ============================================ */
 .input-glow {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .input-glow:focus {
-  border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1), 0 0 15px rgba(34, 211, 238, 0.05);
-}
-
-/* ============================================
-   GRADIENT SECTION DIVIDERS
-   ============================================ */
-.section-divider {
-  position: relative;
-  height: 48px;
-  display: flex;
-  align-items: center;
-}
-.section-divider::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 50% 100% at 50% 50%, rgba(34,211,238,0.04), transparent);
-  pointer-events: none;
-}
-.section-divider::after {
-  content: '';
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--color-accent-cyan),
-    var(--color-accent-emerald),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: shimmer 8s linear infinite;
-  opacity: 0.25;
-}
-
-/* ============================================
-   PROFICIENCY BAR ANIMATION
-   ============================================ */
-@keyframes bar-fill {
-  from { width: 0; }
-}
-.animate-bar-fill {
-  animation: bar-fill 1s ease-out forwards;
-}
-
-/* ============================================
-   NAVBAR SCROLL EFFECT
-   ============================================ */
-.navbar-scrolled {
-  border-bottom-color: rgba(34, 211, 238, 0.15) !important;
-  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 /* ============================================
    REDUCED MOTION
+   ScrollReveal also checks this in JS and reveals immediately, so content is
+   never left at opacity 0 when animations are suppressed.
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .scroll-reveal,
   .animate-reveal-in {
     opacity: 1;
     animation: none !important;
   }
-  .card-hover-lift,
-  .btn-press {
+  .animate-fade-in-up,
+  .animate-toast-in,
+  .animate-toast-out {
+    animation: none !important;
+  }
+  .card-hover-lift {
     transition: none !important;
     transform: none !important;
   }
-  .section-divider::after,
-  .animate-bar-fill {
-    animation: none !important;
+}
+
+/* ============================================
+   PRINT
+   Repaints the site light by redeclaring the tokens, which works only because
+   @theme inline maps to var() rather than literal hex. Used by /resume.
+   ============================================ */
+@media print {
+  :root {
+    --background: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f4f4f5;
+    --border: #d4d4d8;
+    --border-strong: #a1a1aa;
+    --foreground: #111111;
+    --foreground-2: #222222;
+    --muted: #555555;
+    --accent: #111111;
+    --accent-hover: #111111;
+    --accent-foreground: #ffffff;
+    --success: #111111;
+    --danger: #111111;
+  }
+
+  @page {
+    margin: 0.6in;
+  }
+
+  body {
+    background: #ffffff;
+    color: #222222;
+  }
+
+  /* Never break a card or a résumé entry across a page boundary. */
+  article,
+  li,
+  section {
+    break-inside: avoid;
   }
 }

@@ -1,215 +1,89 @@
-"use client";
+import Link from "next/link";
+import { ArrowRight, FileText } from "lucide-react";
 
-import { useEffect, useState } from "react";
-import { Terminal as TerminalIcon, ChevronRight } from "lucide-react";
-
-/**
- * Terminal-style status component with character-by-character typing.
- * All content is static — no user-controlled input is rendered,
- * eliminating XSS risk in this component.
- */
-const TERMINAL_LINES = [
-  { prompt: "$ whoami", output: "security-researcher", delay: 600 },
-  { prompt: "$ cat /etc/status", output: "[ ACTIVE ] Studying for OSCP", delay: 800 },
-  { prompt: "$ uptime", output: "365+ days in cybersecurity", delay: 700 },
-  { prompt: "$ nmap -sV portfolio", output: "All services secured. 0 vulnerabilities found.", delay: 900 },
-];
-
-function LiveTerminal() {
-  const [currentLine, setCurrentLine] = useState(0);
-  const [phase, setPhase] = useState<"typing" | "output">("typing");
-  const [typedChars, setTypedChars] = useState(0);
-  const [completedLines, setCompletedLines] = useState<number[]>([]);
-
-  // "Done" is derived rather than stored. Keeping it as a third `phase` value
-  // meant the effect had to setState synchronously on its own dependency,
-  // which cascades an extra render for no gain (react-hooks/set-state-in-effect).
-  const isDone = currentLine >= TERMINAL_LINES.length;
-
-  useEffect(() => {
-    if (isDone) return;
-
-    const line = TERMINAL_LINES[currentLine];
-
-    if (phase === "typing") {
-      if (typedChars < line.prompt.length) {
-        const timeout = setTimeout(() => {
-          setTypedChars((c) => c + 1);
-        }, 35);
-        return () => clearTimeout(timeout);
-      } else {
-        // Prompt fully typed, pause then show output
-        const timeout = setTimeout(() => {
-          setPhase("output");
-        }, 200);
-        return () => clearTimeout(timeout);
-      }
-    }
-
-    if (phase === "output") {
-      // Output appears instantly, then pause before next line
-      const timeout = setTimeout(() => {
-        setCompletedLines((prev) => [...prev, currentLine]);
-        setCurrentLine((l) => l + 1);
-        setPhase("typing");
-        setTypedChars(0);
-      }, line.delay);
-      return () => clearTimeout(timeout);
-    }
-  }, [currentLine, phase, typedChars, isDone]);
-
-  return (
-    <div
-      className="w-full max-w-xl rounded-lg border border-border bg-card overflow-hidden glow-cyan"
-      role="img"
-      aria-label="Terminal showing live status information"
-    >
-      {/* Title bar */}
-      <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 bg-card">
-        <div className="flex gap-1.5">
-          <span className="h-3 w-3 rounded-full bg-red-500/70" aria-hidden="true" />
-          <span className="h-3 w-3 rounded-full bg-amber-400/70" aria-hidden="true" />
-          <span className="h-3 w-3 rounded-full bg-emerald-400/70" aria-hidden="true" />
-        </div>
-        <span className="ml-2 text-xs text-muted font-mono">status@portfolio ~ </span>
-      </div>
-
-      {/* Terminal body */}
-      <div className="p-4 font-mono text-sm space-y-2 terminal-scrollbar min-h-[160px]">
-        {/* Completed lines */}
-        {completedLines.map((idx) => (
-          <div key={idx}>
-            <div className="flex items-center gap-1 text-accent-emerald">
-              <ChevronRight className="h-3 w-3" aria-hidden="true" />
-              <span>{TERMINAL_LINES[idx].prompt}</span>
-            </div>
-            <p className="ml-4 text-foreground/80">{TERMINAL_LINES[idx].output}</p>
-          </div>
-        ))}
-
-        {/* Currently typing line */}
-        {currentLine < TERMINAL_LINES.length && (
-          <div>
-            <div className="flex items-center gap-1 text-accent-emerald">
-              <ChevronRight className="h-3 w-3" aria-hidden="true" />
-              <span>{TERMINAL_LINES[currentLine].prompt.slice(0, typedChars)}</span>
-              {phase === "typing" && (
-                <span className="inline-block w-2 h-4 bg-accent-cyan animate-blink" aria-hidden="true" />
-              )}
-            </div>
-            {phase === "output" && (
-              <p className="ml-4 text-foreground/80">{TERMINAL_LINES[currentLine].output}</p>
-            )}
-          </div>
-        )}
-
-        {/* Final cursor after all lines are done */}
-        {isDone && (
-          <div className="flex items-center gap-1 text-accent-emerald">
-            <ChevronRight className="h-3 w-3" aria-hidden="true" />
-            <span className="inline-block w-2 h-4 bg-accent-cyan animate-blink" aria-hidden="true" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+import { Button } from "@/components/ui/button";
+import { Headshot } from "@/components/ui/headshot";
+import { SocialLinks } from "@/components/ui/social-links";
+import { SITE } from "@/lib/site";
 
 /**
- * Entrance is pure CSS (see .animate-reveal-in in globals.css) rather than a
- * `mounted` state flag toggled from an effect. The flag forced a second render
- * on every load purely to start an animation, and tripped
- * react-hooks/set-state-in-effect. CSS animations already start on first paint.
+ * A Server Component. The staggered entrance is pure CSS (`.animate-reveal-in`
+ * plus an inline animationDelay), so the hero ships no JavaScript at all —
+ * which is why framer-motion was dropped in this rebuild.
  */
-export function HeroSection() {
+export function Hero() {
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center px-6 pt-24 pb-16"
+      className="px-6 pb-20 pt-32 sm:pt-36"
       aria-labelledby="hero-heading"
     >
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(34,211,238,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.3) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Subtle glow orb */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 mx-auto max-w-5xl w-full flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
-        {/* Text content */}
-        <div className="flex-1 text-center lg:text-left space-y-6">
-          <div
-            className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs font-mono text-accent-cyan animate-reveal-in"
+      {/*
+        Deliberately not a 100vh hero. Forcing full-viewport height centred the
+        content and left a dead band under it, and pushed the proof strip below
+        the fold — the two numbers a recruiter most wants early.
+      */}
+      <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-16">
+        <div>
+          <p
+            className="animate-reveal-in font-mono text-[11px] uppercase tracking-[0.14em] text-accent"
             style={{ animationDelay: "0ms" }}
           >
-            <TerminalIcon className="h-3 w-3" aria-hidden="true" />
-            <span>Open to Full-Time Security Engineering &amp; SOC Analyst Roles</span>
-          </div>
+            {SITE.role} · Open to full-time roles
+          </p>
 
           <h1
             id="hero-heading"
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight animate-reveal-in"
-            style={{ animationDelay: "150ms" }}
+            className="animate-reveal-in mt-5 text-4xl font-semibold leading-[1.05] tracking-[-0.02em] text-foreground sm:text-5xl lg:text-6xl"
+            style={{ animationDelay: "80ms" }}
           >
-            <span className="text-foreground">Koffi Jean-Marie</span>
-            <br />
-            <span className="text-foreground">Amedjonekou</span>
+            {SITE.name}
           </h1>
 
           <p
-            className="text-xl sm:text-2xl font-medium text-accent-cyan font-mono tracking-wide animate-reveal-in"
-            style={{ animationDelay: "250ms" }}
+            className="animate-reveal-in mt-5 text-lg text-foreground-2 sm:text-xl"
+            style={{ animationDelay: "160ms" }}
           >
-            Cybersecurity Engineer
+            {SITE.primaryLine}
           </p>
 
           <p
-            className="max-w-lg text-lg text-muted leading-relaxed mx-auto lg:mx-0 animate-reveal-in"
-            style={{ animationDelay: "350ms" }}
+            className="animate-reveal-in mt-4 max-w-xl leading-relaxed text-muted"
+            style={{ animationDelay: "240ms" }}
           >
-            Dedicated cybersecurity professional with hands-on expertise across
-            penetration testing, vulnerability management, cloud security, and
-            governance frameworks. Committed to the principle of
-            &lsquo;secure-by-default&rsquo; in every technical decision.
+            {SITE.positioning}
           </p>
 
           <div
-            className="flex flex-wrap gap-4 justify-center lg:justify-start animate-reveal-in"
-            style={{ animationDelay: "450ms" }}
+            className="animate-reveal-in mt-9 flex flex-wrap items-center gap-3"
+            style={{ animationDelay: "320ms" }}
           >
-            <a
-              href="#labs"
-              className="inline-flex items-center gap-2 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 px-5 py-2.5 text-sm font-medium text-accent-cyan btn-press hover:bg-accent-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
-            >
-              View My Work
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-muted btn-press hover:text-foreground hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-cyan"
-            >
-              Get in Touch
-            </a>
+            <Button size="lg" asChild>
+              <Link href="/#work">
+                View work
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href={SITE.resumeHref}>
+                <FileText aria-hidden="true" />
+                Resume
+              </Link>
+            </Button>
+          </div>
+
+          <div
+            className="animate-reveal-in mt-8"
+            style={{ animationDelay: "400ms" }}
+          >
+            <SocialLinks />
           </div>
         </div>
 
-        {/* Terminal widget */}
         <div
-          className="flex-1 flex justify-center lg:justify-end w-full animate-reveal-in"
-          style={{ animationDelay: "550ms" }}
+          className="animate-reveal-in order-first lg:order-last"
+          style={{ animationDelay: "160ms" }}
         >
-          <LiveTerminal />
+          <Headshot />
         </div>
       </div>
     </section>
