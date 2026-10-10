@@ -22,6 +22,14 @@ export interface SiteConfig {
   positioning: string;
   /** Meta description — search results and social cards. */
   description: string;
+  /**
+   * Two or three first-person sentences: the résumé Summary and the intro to
+   * the Background section. Ordered for a security reader — degree and
+   * tooling first, shipped software as range, the education background as
+   * the reason the problem was visible. Never a sentence that excuses the
+   * path.
+   */
+  about: string;
   email: string;
   github: string;
   linkedin: string;
@@ -47,11 +55,13 @@ export const SITE: SiteConfig = {
     "I design identity and cloud controls that hold up under audit, then back them with detection engineering and vulnerability management.",
   description:
     "Cybersecurity engineer working across identity, cloud security, vulnerability management, and GRC. CompTIA, Rapid7, and Microsoft certified. Open to full-time security engineering and SOC analyst roles.",
+  about:
+    "I hold an M.S. in Cybersecurity and Information Assurance and work across identity, cloud, and vulnerability management — Rapid7 InsightVM and InsightIDR as the enterprise tooling, and a home lab of Proxmox, pfSense, and Wazuh where I test what I design. I also ship software: OuraGrove, an offline-first EdTech platform, and TogoAho, a TypeScript progressive web app. My degrees in education came first, and they are why I noticed that EdTech is where security is weakest and the stakes highest — the users are minors and the data is academic records.",
   email: "jm18306@gmail.com",
   github: "https://github.com/Ouraking",
   linkedin: "https://www.linkedin.com/in/koffi-amedjonekou/",
   resumeHref: "/resume",
-  location: "United States · open to remote",
+  location: "Boston area · open to remote",
   availability:
     "Open to full-time security engineering and SOC analyst roles",
   headshot: null,

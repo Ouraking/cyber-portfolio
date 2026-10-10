@@ -14,8 +14,8 @@ export interface NowItem {
 }
 
 export const NOW: { updated: string; updatedLabel: string; items: NowItem[] } = {
-  updated: "2026-09",
-  updatedLabel: "September 2026",
+  updated: "2026-10",
+  updatedLabel: "October 2026",
   items: [
     {
       label: "Focus",
@@ -24,6 +24,12 @@ export const NOW: { updated: string; updatedLabel: string; items: NowItem[] } = 
     {
       label: "Studying",
       text: "RHCSA, targeting 2026. Linux administration is the gap between reading a finding and fixing the host it came from.",
+    },
+    {
+      // "Preparing" and "developing" are the accurate words. Nothing here is
+      // published, presented, or peer-reviewed, and the copy must not say so.
+      label: "Research",
+      text: "Preparing applied research for upcoming international cybersecurity conferences — an argument I'm developing that offline-first EdTech design is also a privacy and security architecture.",
     },
     {
       label: "Looking for",

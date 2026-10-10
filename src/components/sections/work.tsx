@@ -5,6 +5,7 @@ import { Section, SectionHeader } from "@/components/ui/section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { PROJECTS, type Project } from "@/data/projects";
+import { BUILDING } from "@/data/building";
 
 /**
  * The featured project gets the full Context / Approach / Outcome breakdown
@@ -134,6 +135,50 @@ export function WorkSection() {
         {rest.map((project, index) => (
           <ScrollReveal key={project.slug} delay={index * 80}>
             <ProjectCard project={project} />
+          </ScrollReveal>
+        ))}
+      </div>
+
+      {/*
+        Products and lab work, subordinate to the case studies: evidence of
+        range for a security reader, not a second headline. See
+        data/building.ts for what may and may not be claimed here.
+      */}
+      <h3 className="mt-14 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+        Also building
+      </h3>
+      <div className="mt-4 grid gap-5 sm:grid-cols-3">
+        {BUILDING.map((item, index) => (
+          <ScrollReveal key={item.name} delay={index * 80}>
+            <TiltCard className="h-full">
+              <h4 className="text-base font-medium text-foreground">
+                {item.url ? (
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  item.name
+                )}
+              </h4>
+              <p className="mt-2 text-sm leading-relaxed text-foreground-2">
+                {item.description}
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-1.5">
+                {item.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="rounded-md bg-surface-2 px-2 py-0.5 font-mono text-[11px] text-muted"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </TiltCard>
           </ScrollReveal>
         ))}
       </div>

@@ -83,7 +83,8 @@ export function SkillsSection() {
         </dl>
       </SectionHeader>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Three across: six domains make two full rows, never an orphan. */}
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {SKILL_DOMAINS.map((domain, index) => (
           <ScrollReveal key={domain.title} delay={index * 80}>
             <DomainCard domain={domain} />
