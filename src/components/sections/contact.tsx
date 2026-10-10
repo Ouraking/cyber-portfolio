@@ -170,8 +170,10 @@ export function ContactSection() {
   };
 
   const fieldClasses = (field: FieldName) =>
-    `input-glow w-full rounded-lg border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted/60 focus:outline-none ${
-      errors[field] ? "border-danger/50" : "border-border"
+    `input-glow w-full rounded-lg border bg-background/60 px-4 py-2.5 text-sm text-foreground placeholder:text-muted/60 focus:outline-none ${
+      errors[field]
+        ? "border-danger/50"
+        : "border-white/10 hover:border-white/20"
     }`;
 
   const errorClasses =
@@ -184,11 +186,7 @@ export function ContactSection() {
   ];
 
   return (
-    <section
-      id="contact"
-      className="border-t border-border"
-      aria-labelledby="contact-heading"
-    >
+    <section id="contact" aria-labelledby="contact-heading">
       {/*
         NOTE: the toast at the bottom of this file is intentionally rendered
         outside the ScrollReveal below. ScrollReveal's animation leaves a
@@ -220,7 +218,7 @@ export function ContactSection() {
                 {details.map(({ icon: Icon, label, value }) => (
                   <div
                     key={label}
-                    className="flex items-start gap-4 rounded-lg border border-border bg-card p-4"
+                    className="glass-1 flex items-start gap-4 rounded-lg p-4"
                   >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-2">
                       <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
@@ -240,7 +238,7 @@ export function ContactSection() {
 
             <form
               onSubmit={handleSubmit}
-              className="space-y-5 rounded-xl border border-border bg-card p-6"
+              className="glass-2 space-y-5 rounded-xl p-6"
               noValidate
             >
               <div>
