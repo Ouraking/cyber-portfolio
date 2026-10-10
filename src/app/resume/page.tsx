@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import { PrintButton } from "@/components/ui/print-button";
 import { SITE, displayUrl } from "@/lib/site";
 import { PROJECTS } from "@/data/projects";
+import { BUILDING } from "@/data/building";
 import { SKILL_DOMAINS } from "@/data/skills";
 import {
   groupEarnedByVendor,
   upcomingCertifications,
 } from "@/data/certifications";
 import { EDUCATION, hasEducationPlaceholders } from "@/data/education";
+import { COMMUNITY, MEMBERSHIPS } from "@/data/community";
 
 /**
  * A print-to-PDF résumé rather than a hosted PDF file: one source of truth,
@@ -36,7 +38,6 @@ function Heading({ children }: { children: string }) {
 }
 
 export default function ResumePage() {
-  const education = EDUCATION[0];
   const certGroups = groupEarnedByVendor();
   const upcoming = upcomingCertifications();
 
@@ -90,29 +91,34 @@ export default function ResumePage() {
 
         <section className="mt-10">
           <Heading>Summary</Heading>
-          <p className="mt-3 leading-relaxed text-foreground-2">
-            {SITE.description}
-          </p>
+          <p className="mt-3 leading-relaxed text-foreground-2">{SITE.about}</p>
         </section>
 
         <section className="mt-8">
           <Heading>Education</Heading>
-          <div className="mt-3">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-              <h3 className="font-medium text-foreground">
-                {education.degree}, {education.field}
-              </h3>
-              <p className="font-mono text-xs text-muted">{education.period}</p>
-            </div>
-            <p className="mt-0.5 text-sm text-foreground-2">
-              {education.institution} · {education.location}
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted">
-              {education.highlights.map((highlight) => (
-                <li key={highlight}>{highlight}</li>
-              ))}
-            </ul>
-          </div>
+          <ul className="mt-3 space-y-4">
+            {EDUCATION.map((entry) => (
+              <li key={entry.degree + entry.field}>
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <h3 className="font-medium text-foreground">
+                    {entry.degree}, {entry.field}
+                  </h3>
+                  <p className="font-mono text-xs text-muted">{entry.period}</p>
+                </div>
+                <p className="mt-0.5 text-sm text-foreground-2">
+                  {entry.institution}
+                  {entry.location && ` · ${entry.location}`}
+                </p>
+                {entry.highlights.length > 0 && (
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted">
+                    {entry.highlights.map((highlight) => (
+                      <li key={highlight}>{highlight}</li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className="mt-8">
@@ -134,6 +140,19 @@ export default function ResumePage() {
                 <p className="mt-1 text-sm leading-relaxed text-foreground">
                   {project.outcome}
                 </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-8">
+          <Heading>Also building</Heading>
+          <ul className="mt-3 space-y-1.5 text-sm text-foreground-2">
+            {BUILDING.map((item) => (
+              <li key={item.name}>
+                <span className="font-medium text-foreground">{item.name}</span>
+                {" — "}
+                {item.description}
               </li>
             ))}
           </ul>
@@ -173,6 +192,22 @@ export default function ResumePage() {
               <li key={domain.title}>
                 <span className="text-muted">{domain.title}: </span>
                 {domain.skills.map((skill) => skill.name).join(", ")}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="mt-8">
+          <Heading>Affiliations</Heading>
+          <ul className="mt-3 space-y-1.5 text-sm text-foreground-2">
+            <li>
+              <span className="text-muted">Memberships: </span>
+              {MEMBERSHIPS.join(", ")}
+            </li>
+            {COMMUNITY.map((item) => (
+              <li key={item.role}>
+                <span className="text-muted">{item.role}: </span>
+                {item.detail}
               </li>
             ))}
           </ul>
