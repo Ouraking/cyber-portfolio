@@ -147,7 +147,7 @@ export function WorkSection() {
       <h3 className="mt-14 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
         Also building
       </h3>
-      <div className="mt-4 grid gap-5 sm:grid-cols-3">
+      <div className="mt-4 grid gap-5 sm:grid-cols-2">
         {BUILDING.map((item, index) => (
           <ScrollReveal key={item.name} delay={index * 80}>
             <TiltCard className="h-full">

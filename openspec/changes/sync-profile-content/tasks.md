@@ -28,9 +28,9 @@ Independently shippable as a hotfix; nothing later depends on groups 2–5 being
 
 ## 4. Shipped products
 
-- [x] 4.1 Create `src/data/building.ts` exporting `BUILDING: BuildingItem[]` (`name`, `description`, `tags`, optional `url`) with exactly three items in order: home lab (Proxmox, pfSense, Wazuh, Docker, Home Assistant OS — security architecture lab), OuraGrove (secure, offline-first EdTech infrastructure), TogoAho (TypeScript PWA: Togolese culture, history, tourism, gastronomy). No `url` unless **(owner)** supplies one. Verify no description contains a number, a date, or "team", "company", or "funded".
-- [x] 4.2 Add an "Also building" sub-heading and three-up `TiltCard` row beneath the case-study grid in `src/components/sections/work.tsx`, rendering a link only when `url` is set. Verify the home page shows the three cards after the case studies, none has a "Case study" link, and Azea, Sukuvi, BioQuest, Labo Poche, and AvoStudio appear nowhere on the page.
-- [x] 4.3 Add an "Also building" line to `/resume` after Selected projects. Verify it lists the three names with their descriptions, and the proof strip's "Case studies published" still reads 4.
+- [x] 4.1 Create `src/data/building.ts` exporting `BUILDING: BuildingItem[]` (`name`, `description`, `tags`, optional `url`) with exactly two items in order: home lab (Proxmox, pfSense, Wazuh, Docker, Home Assistant OS — security architecture lab), OuraGrove (secure, offline-first EdTech infrastructure). TogoAho was dropped at the owner's request. No `url` unless **(owner)** supplies one. Verify no description contains a number, a date, or "team", "company", or "funded".
+- [x] 4.2 Add an "Also building" sub-heading and two-up `TiltCard` row beneath the case-study grid in `src/components/sections/work.tsx`, rendering a link only when `url` is set. Verify the home page shows the two cards after the case studies, none has a "Case study" link, and TogoAho, Azea, Sukuvi, BioQuest, Labo Poche, and AvoStudio appear nowhere on the page.
+- [x] 4.3 Add an "Also building" line to `/resume` after Selected projects. Verify it lists the two names with their descriptions, and the proof strip's "Case studies published" still reads 4.
 
 ## 5. Skill domains
 

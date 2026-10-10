@@ -7,19 +7,19 @@ A small, audience-chosen set of products and lab work shown as evidence of range
 ## ADDED Requirements
 
 ### Requirement: Also-building row
-The Work section SHALL show, beneath the case studies, a row titled "Also building" with exactly three items: the home lab (Proxmox, pfSense, Wazuh, Docker, Home Assistant OS), OuraGrove (secure, offline-first EdTech infrastructure), and TogoAho (a TypeScript Progressive Web App on Togolese culture, history, tourism, and gastronomy). Each item SHALL show a name, a one-sentence description, and tags.
+The Work section SHALL show, beneath the case studies, a row titled "Also building" with exactly two items: the home lab (Proxmox, pfSense, Wazuh, Docker, Home Assistant OS) and OuraGrove (secure, offline-first EdTech infrastructure). Each item SHALL show a name, a one-sentence description, and tags.
 
-#### Scenario: Three items on the home page
+#### Scenario: Two items on the home page
 - **WHEN** the Work section renders
-- **THEN** an "Also building" row with exactly three items follows the case-study grid, in the order home lab, OuraGrove, TogoAho
+- **THEN** an "Also building" row with exactly two items follows the case-study grid, in the order home lab, OuraGrove
 
-#### Scenario: Résumé carries the same three
+#### Scenario: Résumé carries the same two
 - **WHEN** `/resume` renders
-- **THEN** an "Also building" line lists the same three items by name with their one-sentence descriptions
+- **THEN** an "Also building" line lists the same two items by name with their one-sentence descriptions
 
 #### Scenario: Other products are omitted
 - **WHEN** any page renders
-- **THEN** Azea, Sukuvi, BioQuest, Labo Poche, and AvoStudio do not appear
+- **THEN** TogoAho, Azea, Sukuvi, BioQuest, Labo Poche, and AvoStudio do not appear
 
 ### Requirement: No invented claims
 Items SHALL state only confirmed facts. They SHALL NOT state user counts, revenue, outcomes, launch dates, team size, or funding, and SHALL NOT imply a company or employees. A link SHALL appear only when the owner has supplied a URL.

@@ -39,7 +39,7 @@ Constraints found in the code that shape the approach:
 *Amended at apply time:* the owner supplied institutions and graduation dates only (WGU, April 2026; Université de Lomé, 2019 and 2017). Rather than invent start dates or an address for an online university, `start` is dropped, `location` is optional (omitted for WGU, "Lomé, Togo" for the B.A.s, which the institution's name states), and `period` reads "Graduated <date>". `end` is kept for the `<time datetime>`.
 
 ### 3. "Also building" lives inside the Work section
-A sub-heading and a three-up row of `TiltCard`s beneath the case-study grid. Cards show name, one sentence, tags; a link only when `url` is set. No `Section`/nav changes.
+A sub-heading and a two-up row of `TiltCard`s beneath the case-study grid (three until the owner asked for TogoAho to come off the site during apply; the tier basis in Decision 6 still holds — it was built, it is just not showcased). Cards show name, one sentence, tags; a link only when `url` is set. No `Section`/nav changes.
 *Alternative:* a new `#building` section with its own nav link. Rejected — the page already has eight sections and the profile's guidance for this audience is that products are supporting evidence, not a headline.
 
 ### 4. Affiliations live inside Background
@@ -93,6 +93,6 @@ A grep over `src/data` and `src/lib/site.ts` for `published|presented|accepted|p
 Deferrable — none changes the specs, approach, or task list:
 
 - Final tier for any row in the table under Decision 6 (owner edits `skills.ts`).
-- URLs for OuraGrove, TogoAho, or a home-lab write-up, if the owner wants them linked.
+- URLs for OuraGrove or a home-lab write-up, if the owner wants them linked.
 - Whether the contact email `jm18306@gmail.com` is still current (absent from the profile; left unchanged).
 - Whether "GCP" stays in the "Cloud (AWS, Azure, GCP)" skill entry (absent from the profile; left unchanged).

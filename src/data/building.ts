@@ -1,6 +1,6 @@
 /**
  * Products and lab work shown as evidence of range beside the case studies.
- * Three, chosen for a security-employer reader; the rest of the owner's
+ * Two, chosen for a security-employer reader; the rest of the owner's
  * projects are deliberately left off so this reads as focus, not scatter.
  *
  * These are not case studies: no Context/Approach/Outcome, no /work route,
@@ -28,11 +28,5 @@ export const BUILDING: BuildingItem[] = [
     description:
       "Independent EdTech platform built on secure, offline-first digital infrastructure.",
     tags: ["EdTech", "Offline-first", "Security-first"],
-  },
-  {
-    name: "TogoAho",
-    description:
-      "TypeScript progressive web app covering Togolese culture, regional history, tourism, and gastronomy.",
-    tags: ["TypeScript", "PWA"],
   },
 ];
