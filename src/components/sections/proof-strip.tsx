@@ -27,7 +27,7 @@ export function ProofStrip() {
   return (
     <section aria-label="Credentials at a glance" className="px-6">
       <ScrollReveal>
-        <div className="mx-auto max-w-6xl border-y border-border">
+        <div className="mx-auto max-w-6xl">
           <ul className="grid grid-cols-2 divide-border sm:grid-cols-4 sm:divide-x">
             {proof.map((item) => (
               <li key={item.label} className="px-5 py-7 sm:px-6">

@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
  * is how the previous build ended up with sections at three different
  * paddings.
  *
- * Sections are separated by a single 1px top border. There is no decorative
- * divider; the rule and the whitespace do the work.
+ * Sections carry no border of their own. page.tsx places a GradientDivider
+ * between them, so the separator is defined in one place and a section can be
+ * reordered without leaving a stray rule behind.
  */
 export function Section({
   id,
@@ -30,7 +31,7 @@ export function Section({
       id={id}
       aria-labelledby={labelledBy}
       aria-label={label}
-      className={cn("border-t border-border", className)}
+      className={cn(className)}
     >
       <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">{children}</div>
     </section>

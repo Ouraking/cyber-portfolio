@@ -1,5 +1,8 @@
+import type { CSSProperties } from "react";
+
 import { Section, SectionHeader } from "@/components/ui/section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { TiltCard } from "@/components/ui/tilt-card";
 import {
   SKILL_DOMAINS,
   TIER_LEGEND,
@@ -7,46 +10,51 @@ import {
   type SkillDomain,
 } from "@/data/skills";
 
+/** Tiers are ranked 1–3; a full bar is the top tier. */
+const TOP_RANK = Math.max(...Object.values(TIER_RANK));
+
 function DomainCard({ domain }: { domain: SkillDomain }) {
   return (
-    <div className="card-hover-lift h-full rounded-xl border border-border bg-card p-6">
+    <TiltCard className="h-full">
       <h3 className="text-base font-medium text-foreground">{domain.title}</h3>
       <p className="mt-1 text-xs text-muted">{domain.subtitle}</p>
 
-      <ul className="mt-5 space-y-3.5">
-        {domain.skills.map((skill) => {
-          const filled = TIER_RANK[skill.tier];
+      <ul className="mt-5 space-y-4">
+        {domain.skills.map((skill, index) => {
+          // Fill is the tier's share of the scale, not a percentage the
+          // person claimed: see the note in data/skills.ts on why this site
+          // states depth as a named tier.
+          const fill = TIER_RANK[skill.tier] / TOP_RANK;
           return (
             <li key={skill.name}>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-sm text-foreground-2">{skill.name}</span>
-                {/*
-                  Pips are decorative. The tier word below carries the meaning,
-                  so a screen reader announces "Advanced" rather than counting
-                  three dots it cannot interpret.
-                */}
-                <span
-                  className="flex shrink-0 items-center gap-1"
-                  aria-hidden="true"
-                >
-                  {[1, 2, 3].map((pip) => (
-                    <span
-                      key={pip}
-                      className={`h-1.5 w-1.5 rounded-full ${
-                        pip <= filled ? "bg-accent" : "bg-border-strong"
-                      }`}
-                    />
-                  ))}
-                </span>
+              <span className="text-sm text-foreground-2">{skill.name}</span>
+              {/*
+                The bar is decorative. The tier word below carries the
+                meaning, so a screen reader announces "Advanced" rather than
+                trying to interpret a graphic.
+              */}
+              <div
+                className="mt-2 h-1.5 overflow-hidden rounded-full bg-border-strong/60"
+                aria-hidden="true"
+              >
+                <div
+                  className="skill-bar-fill h-full rounded-full"
+                  style={
+                    {
+                      "--fill": fill,
+                      "--bar-delay": `${index * 90}ms`,
+                    } as CSSProperties
+                  }
+                />
               </div>
-              <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+              <span className="mt-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
                 {skill.tier}
               </span>
             </li>
           );
         })}
       </ul>
-    </div>
+    </TiltCard>
   );
 }
 

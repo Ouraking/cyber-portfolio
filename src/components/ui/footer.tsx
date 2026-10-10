@@ -9,10 +9,14 @@ import { SITE } from "@/lib/site";
  * availability banner — availability is already stated in the hero eyebrow,
  * the "currently" block, and the contact card, so repeating it a fourth time
  * with an animated dot was noise.
+ *
+ * Styled to match the rest of the page: a glass panel capped by the same
+ * gradient line the sections use.
  */
 export function Footer() {
   return (
-    <footer className="border-t border-border" role="contentinfo">
+    <footer className="glass-1 border-0 shadow-none" role="contentinfo">
+      <div aria-hidden="true" className="gradient-divider" />
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-medium text-foreground">{SITE.name}</p>

@@ -7,7 +7,7 @@
  */
 export type SkillTier = "Advanced" | "Proficient" | "Working";
 
-/** Filled pips per tier, used for the at-a-glance indicator. */
+/** Rank per tier; the skill bar fills to rank / highest rank. */
 export const TIER_RANK: Record<SkillTier, number> = {
   Working: 1,
   Proficient: 2,
