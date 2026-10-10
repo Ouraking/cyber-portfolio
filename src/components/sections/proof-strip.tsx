@@ -20,7 +20,10 @@ export function ProofStrip() {
       label: "Certifications earned",
     },
     { value: String(PROJECTS.length), label: "Case studies published" },
-    { value: education.degreeShort, label: education.field },
+    {
+      value: education.degreeShort,
+      label: education.fieldShort ?? education.field,
+    },
     { value: "Open", label: `Full-time · ${SITE.location}` },
   ];
 
