@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import type { ReactNode } from "react";
+
+import { useScrollReveal } from "@/lib/hooks/use-scroll-reveal";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -13,40 +15,19 @@ interface ScrollRevealProps {
   animation?: string;
 }
 
+/**
+ * Wraps content so it rises, scales and fades in with a spring the first time
+ * it scrolls into view. The observer lives in `useScrollReveal`; this is the
+ * markup half.
+ */
 export function ScrollReveal({
   children,
   className = "",
   delay = 0,
   threshold = 0.15,
-  animation = "animate-fade-in-up",
+  animation = "animate-reveal-spring",
 }: ScrollRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    // Reveal immediately when the reader has asked for reduced motion. The CSS
-    // suppresses the animation, and `.scroll-reveal` starts at opacity 0 — so
-    // without this the content would stay invisible rather than just unanimated.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.classList.add("is-visible");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("is-visible");
-          observer.unobserve(el);
-        }
-      },
-      { threshold, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [threshold]);
+  const ref = useScrollReveal<HTMLDivElement>({ threshold });
 
   return (
     <div
