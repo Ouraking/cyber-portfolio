@@ -1,7 +1,11 @@
 import { SITE, SITE_URL } from "@/lib/site";
 import { SKILL_DOMAINS } from "@/data/skills";
-import { EDUCATION, hasEducationPlaceholders } from "@/data/education";
+import {
+  hasEducationPlaceholders,
+  institutions,
+} from "@/data/education";
 import { earnedCertifications } from "@/data/certifications";
+import { MEMBERSHIPS, TCRC } from "@/data/community";
 
 /**
  * Structured data for the home page. A personal site is usually found by
@@ -15,9 +19,14 @@ import { earnedCertifications } from "@/data/certifications";
  * `alumniOf` is omitted entirely while education still holds placeholders:
  * publishing "[UNIVERSITY NAME — TODO]" as machine-readable structured data
  * would be worse than publishing nothing.
+ *
+ * TCRC is its own Organization node with `founder` pointing back at the
+ * Person. It is not `worksFor`: a collective he founded is not an employer,
+ * and the graph should not say otherwise.
  */
 export function buildJsonLd() {
   const personId = `${SITE_URL}/#person`;
+  const tcrcId = `${SITE_URL}/#tcrc`;
 
   const person: Record<string, unknown> = {
     "@type": "Person",
@@ -34,19 +43,30 @@ export function buildJsonLd() {
       credentialCategory: "certification",
       name: `${cert.vendor} ${cert.name}`,
     })),
+    memberOf: [
+      ...MEMBERSHIPS.map((name) => ({ "@type": "Organization", name })),
+      { "@type": "Organization", "@id": tcrcId, name: TCRC.name },
+    ],
   };
 
-  if (!hasEducationPlaceholders() && EDUCATION[0]) {
-    person.alumniOf = {
+  if (!hasEducationPlaceholders()) {
+    person.alumniOf = institutions().map((name) => ({
       "@type": "CollegeOrUniversity",
-      name: EDUCATION[0].institution,
-    };
+      name,
+    }));
   }
 
   return {
     "@context": "https://schema.org",
     "@graph": [
       person,
+      {
+        "@type": "Organization",
+        "@id": tcrcId,
+        name: TCRC.name,
+        alternateName: TCRC.shortName,
+        founder: { "@id": personId },
+      },
       {
         "@type": "ProfilePage",
         "@id": `${SITE_URL}/#profilepage`,

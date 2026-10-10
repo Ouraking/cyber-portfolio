@@ -76,4 +76,31 @@ export const SKILL_DOMAINS: SkillDomain[] = [
       { name: "Scripting and Automation", tier: "Proficient" },
     ],
   },
+  /*
+   * Tiers below follow the legend's definitions: Advanced where the skill
+   * shipped in more than one product, Proficient for hands-on lab or single-
+   * project work. The owner adjusts a row here if a self-assessment differs.
+   */
+  {
+    title: "Development and Engineering",
+    subtitle: "Shipped web software, security-first",
+    skills: [
+      { name: "TypeScript", tier: "Advanced" },
+      { name: "Progressive Web Apps", tier: "Advanced" },
+      { name: "Offline-first architecture", tier: "Advanced" },
+      { name: "Secure API integration", tier: "Proficient" },
+      { name: "Claude API and agentic workflows", tier: "Proficient" },
+    ],
+  },
+  {
+    title: "Systems and Home Lab",
+    subtitle: "Self-hosted security architecture",
+    skills: [
+      { name: "Proxmox", tier: "Proficient" },
+      { name: "Docker", tier: "Proficient" },
+      { name: "pfSense", tier: "Proficient" },
+      { name: "Wazuh", tier: "Proficient" },
+      { name: "Home Assistant OS", tier: "Proficient" },
+    ],
+  },
 ];

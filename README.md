@@ -74,14 +74,12 @@ src/
 
 **All content lives in `src/data` and `src/lib/site.ts`.** No component hardcodes a name, an email, or a project description. Counts shown on the page (certifications earned, case studies published) are derived from those arrays, so a number can never disagree with the list beneath it.
 
-## Filling in the placeholders
+## Placeholders and the headshot
 
-Two things are deliberately unfinished.
-
-**Education** — `src/data/education.ts` ships with `[BRACKETED — TODO]` values. The education section and `/resume` both render a visible warning while they remain, and the JSON-LD omits `alumniOf` rather than publishing a placeholder as structured data. Before deploying:
+**Education** — `src/data/education.ts` holds real values, but the placeholder guard is still wired: if any field is ever set back to a `[BRACKETED — TODO]` value (say, while adding a degree whose dates are not yet known), the Background section and `/resume` render a visible warning and the JSON-LD omits `alumniOf` rather than publishing the placeholder as structured data. The pre-deploy check is unchanged:
 
 ```bash
-grep -rn "TODO" src/data/education.ts   # must return nothing
+grep -rn "— TODO\]" src/data/education.ts   # must return nothing
 ```
 
 **Headshot** — `SITE.headshot` is `null`, so the hero renders initials in a bordered square. To add a photo, drop a square image (roughly 800×800, under 200 KB) in `public/` and set:
