@@ -64,8 +64,8 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md transition-[border-color] duration-300 ${
-        scrolled ? "border-border" : "border-transparent"
+      className={`glass-2 fixed top-0 z-40 w-full border-x-0 border-t-0 transition-[border-color] duration-300 ${
+        scrolled ? "border-b-border-strong" : "border-b-transparent"
       }`}
       role="banner"
     >
@@ -87,7 +87,7 @@ export function Navbar() {
               <Link
                 href={link.href}
                 aria-current={activeId === link.id ? "true" : undefined}
-                className={`rounded text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                className={`nav-link rounded text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                   activeId === link.id
                     ? "text-accent"
                     : "text-muted hover:text-foreground"
@@ -131,10 +131,15 @@ export function Navbar() {
         It also removes the subtree from the accessibility tree, which
         `aria-hidden` could not legally do here — aria-hidden on a container
         with focusable children is an ARIA violation.
+
+        No background or backdrop-filter of its own: the drawer sits inside the
+        header, whose `glass-2` already covers it. A nested backdrop-filter
+        would only blur the header's own backdrop, which does nothing but cost
+        a second compositing layer.
       */}
       <nav
         id="mobile-nav"
-        className={`overflow-hidden border-t border-border bg-background/95 px-6 backdrop-blur-md transition-all duration-300 ease-in-out lg:hidden ${
+        className={`overflow-hidden border-t border-border px-6 transition-all duration-300 ease-in-out lg:hidden ${
           mobileOpen ? "max-h-120 py-4 opacity-100" : "max-h-0 py-0 opacity-0"
         }`}
         aria-label="Mobile navigation"

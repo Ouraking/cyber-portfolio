@@ -6,6 +6,7 @@ import { CertificationsSection } from "@/components/sections/certifications";
 import { EducationSection } from "@/components/sections/education";
 import { NowSection } from "@/components/sections/now";
 import { ContactSection } from "@/components/sections/contact";
+import { GradientDivider } from "@/components/ui/gradient-divider";
 
 /**
  * Home page. Ordered so a reader who leaves after one screen still knows who
@@ -16,17 +17,27 @@ import { ContactSection } from "@/components/sections/contact";
  * here: ScrollReveal leaves a non-none `transform` on its wrapper, which would
  * become the containing block for any `position: fixed` descendant — see the
  * toast in contact.tsx.
+ *
+ * Separators are rendered here, between sections, rather than as a border on
+ * each section — see components/ui/section.tsx.
  */
 export default function Home() {
   return (
     <>
       <Hero />
+      <GradientDivider />
       <ProofStrip />
+      <GradientDivider />
       <WorkSection />
+      <GradientDivider />
       <SkillsSection />
+      <GradientDivider />
       <CertificationsSection />
+      <GradientDivider />
       <EducationSection />
+      <GradientDivider />
       <NowSection />
+      <GradientDivider />
       <ContactSection />
     </>
   );
