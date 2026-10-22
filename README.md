@@ -1,3 +1,5 @@
+![Cyber Portfolio banner](./repo-banner.svg)
+
 # Security Portfolio — Koffi Jean-Marie Amedjonekou
 
 Personal portfolio for a cybersecurity engineer, covering identity, cloud security, vulnerability management, and GRC.
